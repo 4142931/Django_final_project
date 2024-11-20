@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}InBest{% endblock %}</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'survey/css/index.css' %}">
+
+    <style>
+        html, body {
+            height: 100%;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        main {
+            flex: 1;
+        }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+
+<body>
+    <!-- header -->
+    <header class="p-3 text-bg-dark">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="/">InBest</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarColor02">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="{% url 'stock_recommendations' %}">주식 추천</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'hot_topic' %}">핫토픽</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'mystock' %}">관심주</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'mbti' %}">MBTI</a>
+                            </li>
+<!--                            <li class="nav-item dropdown">-->
+<!--                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">내 정보</a>-->
+<!--                                <div class="dropdown-menu">-->
+<!--                                    <a class="dropdown-item" href="{% url 'mbti' %}">MBTI</a>-->
+<!--                                    <a class="dropdown-item" href="#">Something else here</a>-->
+<!--                                    <div class="dropdown-divider"></div>-->
+<!--                                    <a class="dropdown-item" href="#">Separated link</a>-->
+<!--                                </div>-->
+<!--                            </li>-->
+                        </ul>
+                      <div class="text-end">
+                            {% if user.is_authenticated %}
+                                <span class="text-light me-2">{{ user.username }}님 환영합니다!</span>
+                                <a href="{% url 'mypage' %}" class="btn btn-outline-light me-2">마이페이지</a>
+                                <a href="{% url 'logout' %}" class="btn btn-outline-light">로그아웃</a>
+                            {% else %}
+                                <a href="{% url 'login' %}" class="btn btn-outline-light me-2">로그인</a>
+                                <a href="{% url 'signup' %}" class="btn btn-warning">회원가입</a>
+                            {% endif %}
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- main contents -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

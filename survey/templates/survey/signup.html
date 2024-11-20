@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}회원가입{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'survey/css/login.css' %}">
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="login-box p-4 bg-white rounded shadow" style="max-width: 400px; width: 100%;">
+        <h2 class="text-center mb-4">회원가입</h2>
+        <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-warning w-100">회원가입</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

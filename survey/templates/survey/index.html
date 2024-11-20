@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}InBest{% endblock %}
+
+{% block content %}
+  <link rel="stylesheet" href="{% static 'survey/css/index.css' %}">
+
+<div class="hero-section">
+    <div class="container">
+        <h1>투자에 진심이신가요?</h1>
+        <p>투자 종목을 선별할 수 있는 도구를 사용할 기회가 찾아왔습니다.</p>
+        <button class="btn btn-orange">주식 추천 받기</button>
+    </div>
+</div>
+
+<div class="news-section py-4">
+    <div class="container">
+        <div class="row">
+            <!-- 주요 뉴스 항목 1 -->
+            <div class="col-lg-8 col-md-6 mb-4">
+                <div class="news-container d-flex align-items-center mb-4">
+                    <div class="news-image">
+                        <img src="https://cdn.digitaltoday.co.kr/news/photo/202411/542178_506592_2336.jpg" class="img-fluid" alt="NVIDIA News" style="max-width: 350px;">
+                    </div>
+                    <div class="news-content ms-4">
+                        <h2 class="h4">테슬라 주가 77% 결정짓는 2가지 요소…성공하면 잭팟</h2>
+                        <p class="text-muted">투자자들은 테슬라의 완전자율주행(FSD) 소프트웨어와 출시 예정인 로보택시 사이버 캡이 성공한다면 엄청난 수익으로 이어질 것으로 보고 있다. 그러나 이것들이 실패하면 어떻게 될까.
+                                              출처 : 디지털투데이 (DigitalToday)(https://www.digitaltoday.co.kr)</p>
+                    </div>
+                </div>
+            </div>
+
+               <!-- 기타 뉴스 항목들 -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="row">
+                    <div class="col-6 col-md-12 news-item mb-3">
+                        <p>서울 서리풀 등 수도권 4곳 '그린벨트' 해제..."투기 거래 막는다"</p>
+                    </div>
+                    <div class="col-6 col-md-12 news-item mb-3">
+                        <p>수도권 열린·다세대 전세 거래 중 45%가 역전세...서울</p>
+                    </div>
+                    <div class="col-6 col-md-12 news-item mb-3">
+                        <p>현대건설, 불가리아 고속도로 대형공사 첫 계약 체결</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 주요 뉴스 항목 2 -->
+             <div class="col-lg-8 col-md-6 mb-4">
+                <div class="news-container d-flex align-items-center mb-4">
+                    <div class="news-image">
+                        <img src="https://i-invdn-com.investing.com/news/moved_LYNXNPEK330I8_L.jpg" class="img-fluid" alt="NVIDIA News" style="max-width: 350px;">
+                    </div>
+                    <div class="news-content ms-4">
+                        <h2 class="h4">시총 1위 엔비디아, 3분기 실적 발표 이후 주가 방향은?</h2>
+                        <p class="text-muted">Investing.com – 엔비디아 (NASDAQ:NVDA)가 11월 20일(현지시각) 예정된 3분기 실적 발표를 앞두고 시장의 관심을 집중시키고 있다. 엔비디아는 AI 시장의 폭발적 성장과 데이터 센터 부문의 매출 확대를 기반으로 주가 상승세를 이어가고 있다. 엔비디아는 인공지능(AI) 기술과 데이터 센터 GPU 시장에서 독보적인 위치를 차지하고 있다.</p>
+                    </div>
+                </div>
+            </div>
+
+
+
+                 <!-- 기타 뉴스 항목들 -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="row">
+                    <div class="col-6 col-md-12 news-item mb-3">
+                        <p>서울 서리풀 등 수도권 4곳 '그린벨트' 해제..."투기 거래 막는다"</p>
+                    </div>
+                    <div class="col-6 col-md-12 news-item mb-3">
+                        <p>수도권 열린·다세대 전세 거래 중 45%가 역전세...서울</p>
+                    </div>
+                    <div class="col-6 col-md-12 news-item mb-3">
+                        <p>현대건설, 불가리아 고속도로 대형공사 첫 계약 체결</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <!-- 푸터 -->
+    <footer class="footer mt-auto py-3 bg-dark text-white">
+        <div class="container">
+            <p class="text-center">© 2024 InBest. All rights reserved.</p>
+        </div>
+    </footer>
+
+{% endblock %}

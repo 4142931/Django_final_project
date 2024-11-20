@@ -1,0 +1,40 @@
+.hero-section {
+  background-color: #333;
+  color: white;
+  padding: 50px 0;
+  text-align: center;
+}
+.news-section {
+  padding: 20px 0;
+}
+.news-item {
+  margin-bottom: 20px;
+}
+.btn-orange {
+  background-color: orange;
+  color: white;
+  border: none;
+}
+.btn-orange:hover {
+  background-color: darkorange;
+}
+
+  
+h1 {
+    font-size: 1.5rem; /* 작은 화면에 맞는 헤더 크기 */
+}
+.btn-orange {
+    width: 20%; /* 모바일에서 버튼 가로 전체 차지 */
+    margin-top: 10px;
+}
+.hero-section {
+    text-align: center; /* 모바일에서 가운데 정렬 */
+    padding: 20px;
+}
+.news-item img {
+    max-width: 100%; /* 이미지 가로폭 전체 사용 */
+    height: auto;
+}
+.card {
+    margin-bottom: 20px; 
+}
