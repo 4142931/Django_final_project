@@ -16,8 +16,8 @@ urlpatterns = [
     path('mypage/', views.mypage_view, name='mypage'),
 
     # MBTI 기능 URL 설정
-    path('mbti/', views.mbti, name='mbti'),
-    path('mbti_lion/', views.mbti_lion, name='mbti_lion'),
+    path('mbti_test/', views.mbti_test, name='mbti_test'),
+    path('mbti_result/', views.mbti_result, name='mbti_result'),
 
     # 관심 주식
     path('mystock/', views.mystock, name='mystock'),

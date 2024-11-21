@@ -1,12 +1,58 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}InBest{% endblock %}
+{% block title %}InBest - Hot Topic{% endblock %}
 
 {% block content %}
-    <link rel="styles heet" href="{% static 'survey/css/hot_topic' %}">
+    <link rel="stylesheet" href="{% static 'survey/css/hot_topic.css' %}">
 
+    <div class="hot-topic-container">
+        <div class="hot-topic-box-wrapper">
+            <!-- Left Boxes: Good News and Bad News -->
+            <div class="hot-topic-box">
+                <h2 class="hot-topic-title good-news">금일 호재</h2>
+                <p class="hot-topic-content">여기에 금일 호재 내용이 들어갑니다. 시장 상황이 긍정적으로 변하고 있습니다.</p>
+            </div>
+            <div class="hot-topic-box">
+                <h2 class="hot-topic-title bad-news">금일 악재</h2>
+                <p class="hot-topic-content">여기에 금일 악재 내용이 들어갑니다. 시장 상황이 부정적입니다.</p>
+            </div>
+        </div>
 
-
-
+        <!-- Bottom Boxes: Articles -->
+        <div class="hot-topic-articles">
+            <div class="article-box">
+                <h3 class="article-title">기사 제목 1</h3>
+                <p class="article-content">기사 내용이 여기에 들어갑니다...</p>
+            </div>
+            <div class="article-box">
+                <h3 class="article-title">기사 제목 2</h3>
+                <p class="article-content">기사 내용이 여기에 들어갑니다...</p>
+            </div>
+            <div class="article-box">
+                <h3 class="article-title">기사 제목 3</h3>
+                <p class="article-content">기사 내용이 여기에 들어갑니다...</p>
+            </div>
+            <div class="article-box">
+                <h3 class="article-title">기사 제목 4</h3>
+                <p class="article-content">기사 내용이 여기에 들어갑니다...</p>
+            </div>
+            <div class="article-box">
+                <h3 class="article-title">기사 제목 5</h3>
+                <p class="article-content">기사 내용이 여기에 들어갑니다...</p>
+            </div>
+            <div class="article-box">
+                <h3 class="article-title">기사 제목 6</h3>
+                <p class="article-content">기사 내용이 여기에 들어갑니다...</p>
+            </div>
+            <div class="article-box">
+                <h3 class="article-title">기사 제목 7</h3>
+                <p class="article-content">기사 내용이 여기에 들어갑니다...</p>
+            </div>
+            <div class="article-box">
+                <h3 class="article-title">기사 제목 8</h3>
+                <p class="article-content">기사 내용이 여기에 들어갑니다...</p>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

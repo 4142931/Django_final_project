@@ -1,0 +1,129 @@
+/* MBTI Summary Section Styles */
+.mbti-summary-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    background-color: #ffffff;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.mbti-summary-card {
+    display: flex;
+    flex-direction: row;
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 30px;
+    width: 900px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid #333;
+}
+
+.mbti-image {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.mbti-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.mbti-content {
+    flex: 2;
+    text-align: left;
+}
+
+.mbti-type {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.mbti-description {
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.detailed-description {
+    font-size: 1em;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.details-link {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.details-link:hover {
+    text-decoration: underline;
+}
+
+/* Stock Watchlist Section Styles */
+.stock-watchlist-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    background-color: #ffffff;
+    padding-bottom: 30px;
+}
+
+.stock-watchlist-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 30px;
+    width: 900px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid #333;
+    text-align: center;
+}
+
+.stock-watchlist-title {
+    font-size: 1.8em;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.stock-watchlist {
+    list-style-type: none;
+    padding: 0;
+}
+
+.stock-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.stock-name {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.stock-price {
+    font-size: 1.1em;
+}
+
+.stock-change {
+    font-size: 1.1em;
+}
+
+.stock-change.positive {
+    color: green;
+}
+
+.stock-change.negative {
+    color: red;
+}

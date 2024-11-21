@@ -1,0 +1,76 @@
+/* Hot Topic Container Styles */
+.hot-topic-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 30px;
+    gap: 30px;
+}
+
+/* Hot Topic Box Wrapper Styles */
+.hot-topic-box-wrapper {
+    display: flex;
+    gap: 150px;
+    width: 70%;
+    justify-content: space-around;
+}
+
+/* Hot Topic Box Styles */
+.hot-topic-box {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    width: 45%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid #333;
+    text-align: center;
+}
+
+.hot-topic-title {
+    font-size: 1.8em;
+    margin-bottom: 15px;
+}
+
+.good-news {
+    color: #007bff;
+}
+
+.bad-news {
+    color: #d9534f;
+}
+
+.hot-topic-content {
+    font-size: 1.1em;
+    color: #333;
+}
+
+/* Article Box Styles */
+.hot-topic-articles {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 80%;
+    gap: 20px;
+}
+
+.article-box {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    width: 45%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.article-title {
+    font-size: 1.5em;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.article-content {
+    font-size: 1em;
+    color: #555;
+}
