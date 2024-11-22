@@ -1,37 +1,189 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}InBest{% endblock %}
+{% block title %}InBest - 금융 투자 성향 테스트{% endblock %}
 
 {% block content %}
     <link rel="stylesheet" href="{% static 'survey/css/mbti_test.css' %}">
 
     <div class="header">
         <h1>금융 투자 성향 테스트</h1>
-        <p>나와 가장 어울리는 동물은?</p>
+        <p>나와 가장 어울리는 투자 성향을 알아보세요!</p>
     </div>
 
     <!-- Progress bar -->
     <div class="progress-container" style="max-width: 650px; margin: 0 auto; padding: 20px;">
-      <div class="progress" style="height: 8px;">
-          <div class="progress-bar" role="progressbar" style="width: 10%; background-color: #fcb64b;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
-      </div>
-  </div>
-
-    <!-- Question Container -->
-    <div class="question-container">
-        <h3 class="mb-3">Q1</h3>
-        <p>시장 변동성이 큰 상황에서도 자산을 유지하는 것에 얼마나 불안감을 느끼나요</p>
-        
-        <!-- Options -->
-        <button class="option">매우 불안하다😞</button>
-        <button class="option">조금 불안하다🤔</button>
-        <button class="option">별로 불안하지 않다😉</button>
-        <button class="option">전혀 불안하지 않다😎</button>
+        <div class="progress" style="height: 8px;">
+            <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%; background-color: #fcb64b;" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
     </div>
 
+    <!-- Question Containers -->
+    <div id="question-1" class="question-container">
+        <h3 class="mb-3">Q1. 시장 변동성이 큰 상황에서도 자산을 유지하는 것에 얼마나 불안감을 느끼나요?</h3>
+        <button class="option" onclick="nextQuestion(1, 0)">매우 불안하다 (0점)</button>
+        <button class="option" onclick="nextQuestion(1, 1)">조금 불안하다 (1점)</button>
+        <button class="option" onclick="nextQuestion(1, 2)">별로 불안하지 않다 (2점)</button>
+        <button class="option" onclick="nextQuestion(1, 3)">전혀 불안하지 않다 (3점)</button>
+    </div>
 
+    <div id="question-2" class="question-container" style="display: none;">
+        <h3 class="mb-3">Q2. 고위험 고수익 투자 기회를 발견했을 때, 어떤 행동을 취하시겠습니까?</h3>
+        <button class="option" onclick="nextQuestion(2, 0)">절대 투자하지 않는다 (0점)</button>
+        <button class="option" onclick="nextQuestion(2, 1)">신중히 검토 후 상황에 따라 고려한다 (1점)</button>
+        <button class="option" onclick="nextQuestion(2, 2)">기회에 따라 작은 금액으로 시도한다 (2점)</button>
+        <button class="option" onclick="nextQuestion(2, 3)">적극적으로 투자한다 (3점)</button>
+    </div>
 
-<!-- External JavaScript -->
-<script src="{% static 'survey/js/mbti.js' %}"></script>
+    <div id="question-3" class="question-container" style="display: none;">
+        <h3 class="mb-3">Q3. 갑작스러운 시장 하락이 발생했을 때, 어떤 결정을 내리시나요?</h3>
+        <button class="option" onclick="nextQuestion(3, 0)">모든 자산을 매도한다 (0점)</button>
+        <button class="option" onclick="nextQuestion(3, 1)">일부 자산을 매도하고 안전 자산으로 전환한다 (1점)</button>
+        <button class="option" onclick="nextQuestion(3, 2)">상황을 지켜보며 일정 부분만 조정한다 (2점)</button>
+        <button class="option" onclick="nextQuestion(3, 3)">계속 보유하거나 추가 매수한다 (3점)</button>
+    </div>
+
+    <div id="question-4" class="question-container" style="display: none;">
+        <h3 class="mb-3">Q4. 장기적으로 투자할 자산의 종류는 무엇입니까?</h3>
+        <button class="option" onclick="nextQuestion(4, 0)">국채나 고정 수익 상품 (0점)</button>
+        <button class="option" onclick="nextQuestion(4, 1)">ETF나 대형 우량 주식 (1점)</button>
+        <button class="option" onclick="nextQuestion(4, 2)">성장주나 신생 기업 (2점)</button>
+        <button class="option" onclick="nextQuestion(4, 3)">변동성이 큰 신기술 주식 (3점)</button>
+    </div>
+
+    <div id="question-5" class="question-container" style="display: none;">
+        <h3 class="mb-3">Q5. 자산 손실 가능성이 있는 상황에서 얼마나 자산을 잃을 각오가 되어 있나요?</h3>
+        <button class="option" onclick="nextQuestion(5, 0)">절대 손실을 원하지 않는다 (0점)</button>
+        <button class="option" onclick="nextQuestion(5, 1)">10% 이내라면 감수할 수 있다 (1점)</button>
+        <button class="option" onclick="nextQuestion(5, 2)">30%까지도 감수할 수 있다 (2점)</button>
+        <button class="option" onclick="nextQuestion(5, 3)">50% 이상 손실도 감수할 수 있다 (3점)</button>
+    </div>
+
+    <div id="question-6" class="question-container" style="display: none;">
+        <h3 class="mb-3">Q6. 미래 수익보다 현재 원금 보존이 중요한가요?</h3>
+        <button class="option" onclick="nextQuestion(6, 0)">매우 중요하다 (0점)</button>
+        <button class="option" onclick="nextQuestion(6, 1)">다소 중요하다 (1점)</button>
+        <button class="option" onclick="nextQuestion(6, 2)">중요하지 않다 (2점)</button>
+        <button class="option" onclick="nextQuestion(6, 3)">전혀 중요하지 않다 (3점)</button>
+    </div>
+
+    <div id="question-7" class="question-container" style="display: none;">
+        <h3 class="mb-3">Q7. 포트폴리오에서 몇 퍼센트를 고위험 자산에 투자하시겠습니까?</h3>
+        <button class="option" onclick="nextQuestion(7, 0)">20% 미만 (0점)</button>
+        <button class="option" onclick="nextQuestion(7, 1)">20~40% (1점)</button>
+        <button class="option" onclick="nextQuestion(7, 2)">40~60% (2점)</button>
+        <button class="option" onclick="nextQuestion(7, 3)">60% 이상 (3점)</button>
+    </div>
+
+    <div id="question-8" class="question-container" style="display: none;">
+        <h3 class="mb-3">Q8. 주식 투자 외에 예금, 채권 등 안전한 자산을 선호하시나요?</h3>
+        <button class="option" onclick="nextQuestion(8, 0)">매우 선호한다 (0점)</button>
+        <button class="option" onclick="nextQuestion(8, 1)">종종 선호한다 (1점)</button>
+        <button class="option" onclick="nextQuestion(8, 2)">별로 선호하지 않는다 (2점)</button>
+        <button class="option" onclick="nextQuestion(8, 3)">전혀 선호하지 않는다 (3점)</button>
+    </div>
+
+    <div id="question-9" class="question-container" style="display: none;">
+        <h3 class="mb-3">Q9. 투자할 때 가장 중요하게 여기는 요소는 무엇인가요?</h3>
+        <button class="option" onclick="nextQuestion(9, 0)">높은 안전성 (0점)</button>
+        <button class="option" onclick="nextQuestion(9, 1)">안정성과 수익성 (1점)</button>
+        <button class="option" onclick="nextQuestion(9, 2)">수익성 (2점)</button>
+        <button class="option" onclick="nextQuestion(9, 3)">높은 수익성 (3점)</button>
+    </div>
+
+    <div id="question-10" class="question-container" style="display: none;">
+        <h3 class="mb-3">Q10. 시장의 특정 투자 기회를 선별하여 투자하는 것을 좋아하시나요?</h3>
+        <button class="option" onclick="nextQuestion(10, 0)">전혀 좋아하지 않는다 (0점)</button>
+        <button class="option" onclick="nextQuestion(10, 1)">별로 좋아하지 않는다 (1점)</button>
+        <button class="option" onclick="nextQuestion(10, 2)">상황에 따라 선별하여 투자한다 (2점)</button>
+        <button class="option" onclick="nextQuestion(10, 3)">매우 좋아한다 (3점)</button>
+    </div>
+
+    <div id="question-11" class="question-container" style="display: none;">
+        <h3 class="mb-3">Q11. 급격한 시장 변화에 대응하여 포트폴리오를 자주 조정하는 편인가요?</h3>
+        <button class="option" onclick="nextQuestion(11, 0)">절대 조정하지 않는다 (0점)</button>
+        <button class="option" onclick="nextQuestion(11, 1)">가끔 조정한다 (1점)</button>
+        <button class="option" onclick="nextQuestion(11, 2)">상황에 따라 조정한다 (2점)</button>
+        <button class="option" onclick="nextQuestion(11, 3)">자주 조정한다 (3점)</button>
+    </div>
+
+    <div id="question-12" class="question-container" style="display: none;">
+        <h3 class="mb-3">Q12. 예상치 못한 수익 기회가 생겼을 때, 즉각적으로 투자할 준비가 되어 있나요?</h3>
+        <button class="option" onclick="nextQuestion(12, 0)">준비되지 않았다 (0점)</button>
+        <button class="option" onclick="nextQuestion(12, 1)">다소 준비되어 있다 (1점)</button>
+        <button class="option" onclick="nextQuestion(12, 2)">어느 정도 준비되어 있다 (2점)</button>
+        <button class="option" onclick="nextQuestion(12, 3)">완전히 준비되어 있다 (3점)</button>
+    </div>
+
+    <div id="question-13" class="question-container" style="display: none;">
+        <h3 class="mb-3">Q13. 경제적 변화(금리, 환율 등)에 대해 얼마나 자주 주시하시나요?</h3>
+        <button class="option" onclick="nextQuestion(13, 0)">거의 신경 쓰지 않는다 (0점)</button>
+        <button class="option" onclick="nextQuestion(13, 1)">가끔 확인한다 (1점)</button>
+        <button class="option" onclick="nextQuestion(13, 2)">자주 확인한다 (2점)</button>
+        <button class="option" onclick="nextQuestion(13, 3)">매우 자주 확인한다 (3점)</button>
+    </div>
+
+    <div id="question-14" class="question-container" style="display: none;">
+        <h3 class="mb-3">Q14. 지금까지 가장 많이 투자한 자산 클래스는 무엇인가요?</h3>
+        <button class="option" onclick="nextQuestion(14, 0)">예금, 채권 (0점)</button>
+        <button class="option" onclick="nextQuestion(14, 1)">부동산 (1점)</button>
+        <button class="option" onclick="nextQuestion(14, 2)">ETF, 펀드 (2점)</button>
+        <button class="option" onclick="nextQuestion(14, 3)">개별주식, 암호화폐 (3점)</button>
+    </div>
+
+    <div id="question-15" class="question-container" style="display: none;">
+        <h3 class="mb-3">Q15. 다양한 자산에 분산 투자하는 것을 좋아하시나요?</h3>
+        <button class="option" onclick="nextQuestion(15, 0)">매우 좋아한다 (0점)</button>
+        <button class="option" onclick="nextQuestion(15, 1)">좋아한다 (1점)</button>
+        <button class="option" onclick="nextQuestion(15, 2)">그다지 중요하지 않다 (2점)</button>
+        <button class="option" onclick="nextQuestion(15, 3)">별로 선호하지 않는다 (3점)</button>
+    </div>
+
+    <div id="question-16" class="question-container" style="display: none;">
+        <h3 class="mb-3">Q16. 단기적으로 수익을 실현할 기회가 있더라도 장기적인 목표를 위해 참을 수 있나요?</h3>
+        <button class="option" onclick="nextQuestion(16, 0)">매우 참을 수 있다 (0점)</button>
+        <button class="option" onclick="nextQuestion(16, 1)">참을 수 있다 (1점)</button>
+        <button class="option" onclick="nextQuestion(16, 2)">상황에 따라 다르다 (2점)</button>
+        <button class="option" onclick="nextQuestion(16, 3)">참기 어렵다 (3점)</button>
+    </div>
+
+    <div id="question-17" class="question-container" style="display: none;">
+        <h3 class="mb-3">Q17. 최근 5년 동안의 금융 시장 상황이 당신의 투자 행동에 어떻게 영향을 미쳤나요?</h3>
+        <button class="option" onclick="nextQuestion(17, 0)">매우 보수적으로 바뀌었다 (0점)</button>
+        <button class="option" onclick="nextQuestion(17, 1)">약간 보수적으로 바뀌었다 (1점)</button>
+        <button class="option" onclick="nextQuestion(17, 2)">큰 변화 없다 (2점)</button>
+        <button class="option" onclick="nextQuestion(17, 3)">더 공격적으로 바뀌었다 (3점)</button>
+    </div>
+
+    <div id="question-18" class="question-container" style="display: none;">
+        <h3 class="mb-3">Q18. 새로운 투자 상품(예: 암호화폐, 혁신 기술 관련 펀드)에 대한 관심이 많으신가요?</h3>
+        <button class="option" onclick="nextQuestion(18, 0)">전혀 없다 (0점)</button>
+        <button class="option" onclick="nextQuestion(18, 1)">조금 있다 (1점)</button>
+        <button class="option" onclick="nextQuestion(18, 2)">관심 있다 (2점)</button>
+        <button class="option" onclick="nextQuestion(18, 3)">매우 많다 (3점)</button>
+    </div>
+
+    <div id="question-19" class="question-container" style="display: none;">
+        <h3 class="mb-3">Q19. 현재 투자에서 리스크와 수익의 비율이 어느 정도여야 만족스러운가요?</h3>
+        <button class="option" onclick="nextQuestion(19, 0)">리스크 최소, 수익 최소 (0점)</button>
+        <button class="option" onclick="nextQuestion(19, 1)">리스크 적당, 수익 적당 (1점)</button>
+        <button class="option" onclick="nextQuestion(19, 2)">리스크 높고, 수익 높음 (2점)</button>
+        <button class="option" onclick="nextQuestion(19, 3)">최대 리스크, 최대 수익 (3점)</button>
+    </div>
+
+    <div id="question-20" class="question-container" style="display: none;">
+        <h3 class="mb-3">Q20. 당신의 투자 목표는 무엇인가요?</h3>
+        <button class="option" onclick="nextQuestion(20, 0)">안정적인 자산 형성 (0점)</button>
+        <button class="option" onclick="nextQuestion(20, 1)">일정한 수익 실현 (1점)</button>
+        <button class="option" onclick="nextQuestion(20, 2)">고수익 추구 (2점)</button>
+        <button class="option" onclick="nextQuestion(20, 3)">최대한의 자산 성장 (3점)</button>
+    </div>
+
+    <form id="result-form" method="POST" action="{% url 'mbti_result' %}">
+        {% csrf_token %}
+        <input type="hidden" name="total_score" id="total_score">
+    </form>
+
+    <!-- External JavaScript -->
+    <script src="{% static 'survey/js/mbti.js' %}"></script>
 
 {% endblock %}

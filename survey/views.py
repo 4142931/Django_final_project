@@ -1,10 +1,9 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-
-from .models import Question
+from .models import Question, InvestmentResult
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
-
+from django.http import HttpResponse
 
 # 메인 페이지
 def index_view(request):
@@ -113,11 +112,52 @@ def mypage_view(request): # 이미지 경로가 제대로 반응하지 않음
 # mbti 기능
 @login_required
 def mbti_test(request):
-    return render(request, 'survey/mbti_test.html')
+    if request.method == "GET":
+        # 테스트 페이지 표시
+        return render(request, 'survey/mbti_test.html')
+    elif request.method == "POST":
+        # 제출된 점수 가져오기
+        total_score = int(request.POST.get('total_score', 0))
+
+        # 점수에 따른 결과 계산
+        if total_score >= 45:
+            result_type = "사자"
+        elif total_score >= 30:
+            result_type = "독수리"
+        elif total_score >= 15:
+            result_type = "비버"
+        else:
+            result_type = "고슴도치"
+
+        # 결과 저장
+        InvestmentResult.objects.create(
+            user_id=request.user.id,
+            total_score=total_score,
+            result_type=result_type
+        )
+
+        # 세션에 결과 저장
+        request.session['mbti_result'] = {
+            'type': result_type,
+            'description': f"{result_type} 유형 설명"
+        }
+
+        # 결과 페이지로 리다이렉트
+        return redirect('mbti_result')
+
 @login_required
 def mbti_result(request):
-    return render(request, 'survey/mbti_result.html')
+    # 세션에서 결과 가져오기
+    mbti_result = request.session.get('mbti_result')
 
+    if not mbti_result:
+        return HttpResponse("테스트 결과가 없습니다. 다시 시도해주세요.")
+
+    # 결과 페이지 렌더링
+    return render(request, 'survey/mbti_result.html', {
+        'result_type': mbti_result['type'],
+        'result_description': mbti_result['description']
+    })
 
 # 관심 주식
 @login_required

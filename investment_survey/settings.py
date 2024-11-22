@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-aa)k@6u!71_1b^&t-kwen4af$lo1c!&32cg^2l_e!e9=l$t^#("
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True # 개발 환경에서 True(에러 내용 확인 가능) 배포시 false -> 404화면 내기 위함
 
 ALLOWED_HOSTS = []
 
@@ -51,7 +51,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "investment_survey.urls"
+ROOT_URLCONF = "investment_survey.urls" # urls 경로로 들어가는 곳
 
 TEMPLATES = [
     {
