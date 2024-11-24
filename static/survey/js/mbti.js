@@ -1,8 +1,13 @@
-// mbti.js
+// 점수를 저장할 전역 변수 정의
+let totalScore = 0;
+
 console.log("JavaScript loaded");
 
 // JavaScript for navigating between questions
 function nextQuestion(currentQuestion, score) {
+    // 점수 누적
+    totalScore += score;  // 사용자가 응답한 점수를 `totalScore`에 추가
+
     // 현재 질문 숨기기
     const currentQuestionElement = document.getElementById(`question-${currentQuestion}`);
     if (currentQuestionElement) {
@@ -31,7 +36,7 @@ function submitResults() {
     // 폼 생성
     const form = document.createElement('form');
     form.method = 'POST';
-    form.action = '/submit_results/';  // Django view로 점수를 전송할 URL
+    form.action = '/mbti_test/';  // Django view로 점수를 전송할 URL
 
     // CSRF 토큰 추가 (Django에서 보안 상 필요)
     const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
@@ -45,7 +50,7 @@ function submitResults() {
     const scoreInput = document.createElement('input');
     scoreInput.type = 'hidden';
     scoreInput.name = 'total_score';
-    scoreInput.value = totalScore;
+    scoreInput.value = totalScore;  // 누적된 `totalScore` 값을 폼에 추가
     form.appendChild(scoreInput);
 
     // 폼 제출
