@@ -26,9 +26,31 @@
             bottom: 0;
             width: 100%;
         }
+
+
+        /* 서브메뉴 컨테이너에 너비 적용 */
+        .sub-menu-container {
+            display: none; /* 기본적으로 숨김 */
+            width: 1116px !important; /* 고정 너비, !important로 강제 적용 */
+            margin: 0 auto; /* 중앙 정렬 */
+        }
+
+        .sub-menu-container .sub-menu {
+            display: flex; /* 내부 내용 정렬 */
+            flex-wrap: wrap; /* 항목이 넘칠 경우 다음 줄로 이동 */
+        }
+
+        .sub-menu-container .col-md-3 {
+            padding: 5px;
+        }
+
+        .sub-menu-container .sub-menu-item {
+            text-decoration: none;
+            color: #fff; !important;
+        }
+
     </style>
 </head>
-
 
 <body>
     <!-- header -->
@@ -43,28 +65,19 @@
                     <div class="collapse navbar-collapse" id="navbarColor02">
                         <ul class="navbar-nav me-auto">
                             <li class="nav-item">
-                                <a class="nav-link active" href="{% url 'stock_recommendations' %}">종목 추천</a>
+                                <a id="recommendLink" class="nav-link active" href="#" data-submenu="recommendSubMenu">종목 추천</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'hot_topic' %}">관심주</a>
+                                <a id="interestLink" class="nav-link" href="#" data-submenu="interestSubMenu">관심주</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'mystock' %}">뉴스</a>
+                                <a id="newsLink" class="nav-link" href="#" data-submenu="newsSubMenu">뉴스</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'mbti_test' %}">투자성향 테스트</a>
+                                <a id="mbtiLink" class="nav-link" href="#" data-submenu="mbtiSubMenu">투자성향 테스트</a>
                             </li>
-<!--                            <li class="nav-item dropdown">-->
-<!--                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">내 정보</a>-->
-<!--                                <div class="dropdown-menu">-->
-<!--                                    <a class="dropdown-item" href="{% url 'mbti_test' %}">MBTI</a>-->
-<!--                                    <a class="dropdown-item" href="#">Something else here</a>-->
-<!--                                    <div class="dropdown-divider"></div>-->
-<!--                                    <a class="dropdown-item" href="#">Separated link</a>-->
-<!--                                </div>-->
-<!--                            </li>-->
                         </ul>
-                      <div class="text-end">
+                        <div class="text-end">
                             {% if user.is_authenticated %}
                                 <span class="text-light me-2">{{ user.username }}님 환영합니다!</span>
                                 <a href="{% url 'mypage' %}" class="btn btn-outline-light me-2">마이페이지</a>
@@ -73,10 +86,66 @@
                                 <a href="{% url 'login' %}" class="btn btn-outline-light me-2">로그인</a>
                                 <a href="{% url 'signup' %}" class="btn btn-warning">회원가입</a>
                             {% endif %}
+                        </div>
                     </div>
                 </div>
             </nav>
         </div>
+         <!-- 종목 추천 서브메뉴 -->
+    <div class="container mt-2 sub-menu-container" id="recommendSubMenu" style="display: none;">
+        <div class="sub-menu row">
+            <!-- 서브메뉴 내용 -->
+            <div class="col-md-3" style="padding: 5px;">
+                <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">추천 홈</a>
+            </div>
+            <div class="col-md-3" style="padding: 5px;">
+                <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">AI 추천</a>
+            </div>
+            <!-- 추가 항목들을 여기에 추가하세요 -->
+        </div>
+    </div>
+
+    <!-- 관심주 서브메뉴 -->
+    <div class="container mt-2 sub-menu-container" id="interestSubMenu" style="display: none;">
+        <div class="sub-menu row">
+            <!-- 서브메뉴 내용 -->
+            <div class="col-md-3" style="padding: 5px;">
+                <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">관심주 홈</a>
+            </div>
+            <!-- 추가 항목들을 여기에 추가하세요 -->
+        </div>
+    </div>
+
+    <!-- 뉴스 서브메뉴 -->
+    <div class="container mt-2 sub-menu-container" id="newsSubMenu" style="display: none;">
+        <div class="sub-menu row">
+            <!-- 기존 뉴스 서브메뉴 내용 -->
+            <div class="col-md-3" style="padding: 5px;">
+                <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">뉴스 홈</a>
+            </div>
+            <div class="col-md-3" style="padding: 5px;">
+                <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">최신뉴스</a>
+            </div>
+            <div class="col-md-3" style="padding: 5px;">
+                <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">금융 뉴스</a>
+            </div>
+            <div class="col-md-3" style="padding: 5px;">
+                <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">경제 뉴스</a>
+            </div>
+        </div>
+    </div>
+
+        <!-- 투자성향 테스트 서브메뉴 -->
+        <div class="container mt-2 sub-menu-container" id="mbtiSubMenu" style="display: none;">
+            <div class="sub-menu row">
+                <!-- 서브메뉴 내용 -->
+                <div class="col-md-3" style="padding: 5px;">
+                    <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">테스트 홈</a>
+                </div>
+                <!-- 추가 항목들을 여기에 추가하세요 -->
+            </div>
+        </div>
+
     </header>
 
     <!-- main contents -->
@@ -84,8 +153,39 @@
         {% block content %}{% endblock %}
     </main>
 
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // 네비게이션 바에서 이벤트 위임을 사용하여 클릭 이벤트 처리
+            document.querySelector('.navbar-nav').addEventListener('click', function(event) {
+                var target = event.target;
+                if (target.matches('.nav-link')) {
+                    var subMenuId = target.getAttribute('data-submenu');
+                    if (subMenuId) {
+                        event.preventDefault();
+                        toggleSubMenu(subMenuId);
+                    }
+                }
+            });
 
+            function toggleSubMenu(subMenuId) {
+                // 모든 서브메뉴 숨기기
+                var subMenus = document.querySelectorAll('.sub-menu-container');
+                subMenus.forEach(function(menu) {
+                    menu.style.display = 'none';
+                });
+
+                // 선택한 서브메뉴 표시
+                var subMenu = document.getElementById(subMenuId);
+                if (subMenu) {
+                    subMenu.style.display = 'block';
+                } else {
+                    console.warn("서브메뉴를 찾을 수 없습니다:", subMenuId);
+                }
+            }
+        });
+    </script>
 </body>
 </html>

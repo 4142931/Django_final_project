@@ -3,11 +3,13 @@
 {% block title %}InBest{% endblock %}
 
 {% block content %}
-    <link rel="styles heet" href="{% static 'survey/css/mbti_lion.css' %}">
+    <link rel="stylesheet" href="{% static 'survey/css/mbti_result.css' %}">
 
 <div class="result-container">
     <h1>당신의 투자 성향</h1>
     <h2>{{ result_type }}</h2>
     <p>{{ result_description }}</p>
+    <p>{{ result_description02 }}</p>
+    <p>{{ result_description03 }}</p>
 </div>
 {% endblock %}
