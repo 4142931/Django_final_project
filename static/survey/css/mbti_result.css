@@ -1,9 +1,33 @@
-.result-container {
-    text-align: center;
-    margin: 20px auto;
-    padding: 20px;
-    max-width: 600px;
-    border: 1px solid #ddd;
+body {
+    background-color: #fff;
+    font-family: 'Arial', sans-serif;
+}
+
+.card {
+    background-color: #fff;
     border-radius: 10px;
-    background-color: #f9f9f9;
+    max-width: 500px;
+    margin: auto;
+    overflow: hidden;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.text-danger {
+    color: #ffc107  /* 노란색으로 강조 */
+}
+
+.text-muted {
+    color: #6c757d;
+}
+
+.list-unstyled li {
+    margin: 5px 0;
+}
+
+.rounded-image {
+    border-radius: 50%; /* 원형으로 라운딩 */
+    overflow: hidden; /* 이미지를 벗어나는 부분 숨김 */
 }

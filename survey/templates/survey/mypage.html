@@ -16,24 +16,24 @@
             <h2 class="mbti-type">{{ mbti_type }}</h2>
             <p class="mbti-description">{{ mbti_description }}</p>
             <p class="detailed-description">{{ detailed_description }}</p>
-            <a href="#" class="details-link">자세히 보기</a>
+            <a href="{% url 'mbti_result' %}" class="details-link">자세히 보기</a>
         </div>
     </div>
 </div>
 
-<!-- Stock Watchlist Section -->
-<div class="stock-watchlist-container">
-    <div class="stock-watchlist-card">
-        <h2 class="stock-watchlist-title">실시간 관심 주식</h2>
-        <ul class="stock-watchlist">
-            {% for stock in stock_list %}
-            <li class="stock-item">
-                <span class="stock-name">{{ stock.name }}</span>
-                <span class="stock-price">{{ stock.price }}</span>
-                <span class="stock-change {{ stock.change_class }}">{{ stock.change }}</span>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-</div>
+<!--&lt;!&ndash; Stock Watchlist Section &ndash;&gt;-->
+<!--<div class="stock-watchlist-container">-->
+<!--    <div class="stock-watchlist-card">-->
+<!--        <h2 class="stock-watchlist-title">실시간 관심 주식</h2>-->
+<!--        <ul class="stock-watchlist">-->
+<!--            {% for stock in stock_list %}-->
+<!--            <li class="stock-item">-->
+<!--                <span class="stock-name">{{ stock.name }}</span>-->
+<!--                <span class="stock-price">{{ stock.price }}</span>-->
+<!--                <span class="stock-change {{ stock.change_class }}">{{ stock.change }}</span>-->
+<!--            </li>-->
+<!--            {% endfor %}-->
+<!--        </ul>-->
+<!--    </div>-->
+<!--</div>-->
 {% endblock %}

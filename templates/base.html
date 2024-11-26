@@ -31,7 +31,7 @@
         /* 서브메뉴 컨테이너에 너비 적용 */
         .sub-menu-container {
             display: none; /* 기본적으로 숨김 */
-            width: 1116px !important; /* 고정 너비, !important로 강제 적용 */
+            width: 1116px !important; /*
             margin: 0 auto; /* 중앙 정렬 */
         }
 
@@ -46,9 +46,18 @@
 
         .sub-menu-container .sub-menu-item {
             text-decoration: none;
-            color: #fff; !important;
+            color: #fff !important;
         }
 
+        .navbar-brand { font-size: 1.5rem; font-weight: bold;
+            font-weight: bold;
+            color: #f8f9fa;
+            text-decoration: none;
+        }
+
+        .navbar-brand:hover {
+            color: #ffc107;
+        }
     </style>
 </head>
 
@@ -58,23 +67,23 @@
         <div class="container">
             <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="/">InBest</a>
+                    <a class="navbar-brand" href="/">In<span style="color: #ffc107;">B</span>est</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarColor02">
                         <ul class="navbar-nav me-auto">
-                            <li class="nav-item">
-                                <a id="recommendLink" class="nav-link active" href="#" data-submenu="recommendSubMenu">종목 추천</a>
+<!--                            <li class="nav-item">-->
+<!--                                <a id="recommendLink" class="nav-link active bold" href="#" data-submenu="recommendSubMenu">종목 추천</a>-->
+<!--                            </li>-->
+<!--                            <li class="nav-item">-->
+<!--                                <a id="interestLink" class="nav-link" href="#" data-submenu="interestSubMenu">관심주</a>-->
+<!--                            </li>-->
+                            <li class="nav-item ms-5">
+                                <a id="newsLink" class="nav-link active bold" href="#" data-submenu="newsSubMenu">뉴스</a>
                             </li>
-                            <li class="nav-item">
-                                <a id="interestLink" class="nav-link" href="#" data-submenu="interestSubMenu">관심주</a>
-                            </li>
-                            <li class="nav-item">
-                                <a id="newsLink" class="nav-link" href="#" data-submenu="newsSubMenu">뉴스</a>
-                            </li>
-                            <li class="nav-item">
-                                <a id="mbtiLink" class="nav-link" href="#" data-submenu="mbtiSubMenu">투자성향 테스트</a>
+                            <li class="nav-item ms-5">
+                                <a id="mbtiLink" class="nav-link" href="{% url 'mbti_test' %}">투자성향 테스트</a>
                             </li>
                         </ul>
                         <div class="text-end">
@@ -91,61 +100,50 @@
                 </div>
             </nav>
         </div>
-         <!-- 종목 추천 서브메뉴 -->
-    <div class="container mt-2 sub-menu-container" id="recommendSubMenu" style="display: none;">
-        <div class="sub-menu row">
-            <!-- 서브메뉴 내용 -->
-            <div class="col-md-3" style="padding: 5px;">
-                <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">추천 홈</a>
-            </div>
-            <div class="col-md-3" style="padding: 5px;">
-                <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">AI 추천</a>
-            </div>
-            <!-- 추가 항목들을 여기에 추가하세요 -->
-        </div>
-    </div>
 
-    <!-- 관심주 서브메뉴 -->
-    <div class="container mt-2 sub-menu-container" id="interestSubMenu" style="display: none;">
-        <div class="sub-menu row">
-            <!-- 서브메뉴 내용 -->
-            <div class="col-md-3" style="padding: 5px;">
-                <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">관심주 홈</a>
-            </div>
-            <!-- 추가 항목들을 여기에 추가하세요 -->
-        </div>
-    </div>
+             <!-- 종목 추천 서브메뉴 -->
+<!--        <div class="container mt-2 sub-menu-container" id="recommendSubMenu" style="display: none;">-->
+<!--            <div class="sub-menu row">-->
+<!--                &lt;!&ndash; 서브메뉴 내용 &ndash;&gt;-->
+<!--                <div class="col-md-3" style="padding: 5px;">-->
+<!--                    <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">추천 홈</a>-->
+<!--                </div>-->
+<!--                <div class="col-md-3" style="padding: 5px;">-->
+<!--                    <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">AI 추천</a>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; 추가 항목들을 여기에 추가하세요 &ndash;&gt;-->
+<!--            </div>-->
+<!--        </div>-->
 
-    <!-- 뉴스 서브메뉴 -->
-    <div class="container mt-2 sub-menu-container" id="newsSubMenu" style="display: none;">
-        <div class="sub-menu row">
-            <!-- 기존 뉴스 서브메뉴 내용 -->
-            <div class="col-md-3" style="padding: 5px;">
-                <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">뉴스 홈</a>
-            </div>
-            <div class="col-md-3" style="padding: 5px;">
-                <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">최신뉴스</a>
-            </div>
-            <div class="col-md-3" style="padding: 5px;">
-                <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">금융 뉴스</a>
-            </div>
-            <div class="col-md-3" style="padding: 5px;">
-                <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">경제 뉴스</a>
-            </div>
-        </div>
-    </div>
+        <!-- 관심주 서브메뉴 -->
+<!--        <div class="container mt-2 sub-menu-container" id="interestSubMenu" style="display: none;">-->
+<!--            <div class="sub-menu row">-->
+<!--                &lt;!&ndash; 서브메뉴 내용 &ndash;&gt;-->
+<!--                <div class="col-md-3" style="padding: 5px;">-->
+<!--                    <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">관심주 홈</a>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; 추가 항목들을 여기에 추가하세요 &ndash;&gt;-->
+<!--            </div>-->
+<!--        </div>-->
 
-        <!-- 투자성향 테스트 서브메뉴 -->
-        <div class="container mt-2 sub-menu-container" id="mbtiSubMenu" style="display: none;">
+        <!-- 뉴스 서브메뉴 -->
+        <div class="container mt-2 sub-menu-container" id="newsSubMenu" style="display: none;">
             <div class="sub-menu row">
-                <!-- 서브메뉴 내용 -->
+                <!-- 기존 뉴스 서브메뉴 내용 -->
                 <div class="col-md-3" style="padding: 5px;">
-                    <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">테스트 홈</a>
+                    <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">뉴스 홈</a>
                 </div>
-                <!-- 추가 항목들을 여기에 추가하세요 -->
+                <div class="col-md-3" style="padding: 5px;">
+                    <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">최신뉴스</a>
+                </div>
+                <div class="col-md-3" style="padding: 5px;">
+                    <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">악재 호재</a>
+                </div>
+                <div class="col-md-3" style="padding: 5px;">
+                    <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">분석</a>
+                </div>
             </div>
         </div>
-
     </header>
 
     <!-- main contents -->
@@ -157,35 +155,33 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // 네비게이션 바에서 이벤트 위임을 사용하여 클릭 이벤트 처리
-            document.querySelector('.navbar-nav').addEventListener('click', function(event) {
-                var target = event.target;
-                if (target.matches('.nav-link')) {
-                    var subMenuId = target.getAttribute('data-submenu');
-                    if (subMenuId) {
-                        event.preventDefault();
-                        toggleSubMenu(subMenuId);
-                    }
-                }
-            });
-
-            function toggleSubMenu(subMenuId) {
-                // 모든 서브메뉴 숨기기
-                var subMenus = document.querySelectorAll('.sub-menu-container');
-                subMenus.forEach(function(menu) {
-                    menu.style.display = 'none';
-                });
-
-                // 선택한 서브메뉴 표시
-                var subMenu = document.getElementById(subMenuId);
-                if (subMenu) {
-                    subMenu.style.display = 'block';
-                } else {
-                    console.warn("서브메뉴를 찾을 수 없습니다:", subMenuId);
+    document.addEventListener("DOMContentLoaded", function () {
+        // 네비게이션 바에서 이벤트 위임을 사용하여 클릭 이벤트 처리
+        document.querySelector('.navbar-nav').addEventListener('click', function(event) {
+            var target = event.target;
+            if (target.matches('.nav-link')) {
+                var subMenuId = target.getAttribute('data-submenu');
+                if (subMenuId) {
+                    event.preventDefault();
+                    toggleSubMenu(subMenuId);
                 }
             }
         });
+
+        function toggleSubMenu(subMenuId) {
+            var subMenu = document.getElementById(subMenuId);
+            // 선택한 서브메뉴가 현재 보이는 상태면 숨기기
+            if (subMenu.style.display === 'block') {
+                subMenu.style.display = 'none';
+            } else {
+                // 모든 서브메뉴 숨기기
+                document.querySelectorAll('.sub-menu-container').forEach(menu => menu.style.display = 'none');
+                // 선택한 서브메뉴 표시
+                subMenu.style.display = 'block';
+            }
+        }
+    });
     </script>
+
 </body>
 </html>

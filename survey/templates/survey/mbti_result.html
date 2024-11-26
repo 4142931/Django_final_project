@@ -5,11 +5,35 @@
 {% block content %}
     <link rel="stylesheet" href="{% static 'survey/css/mbti_result.css' %}">
 
-<div class="result-container">
-    <h1>당신의 투자 성향</h1>
-    <h2>{{ result_type }}</h2>
-    <p>{{ result_description }}</p>
-    <p>{{ result_description02 }}</p>
-    <p>{{ result_description03 }}</p>
+
+
+<div class="container mt-5">
+    <div class="card text-center shadow">
+        <div class="card-body">
+            <img src="{% static image_path %}" alt="test_image" class="my-3 rounded-image" style="width: 150px;">
+            <h3 class="fw-bold">{{ result_type }}</h3>
+            <h4 class="text-danger">{{ mbti_description }}</h4>
+        </div>
+
+        <div style="text-align: left; margin-left: 20px; margin-right: 20px;">
+            <div class="my-4">
+                <h5 class="fw-bold text-danger">나는 이런 사람이에요!</h5>
+                <ul class="list-unstyled">
+                    <li>{{ detailed_description02 }}</li>
+                </ul>
+            </div>
+
+            <div class="my-4">
+                <h5 class="fw-bold text-danger">나를 위한 투자 팁</h5>
+                <ul class="list-unstyled">
+                    <li>{{ detailed_description03 }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+
 {% endblock %}
+
