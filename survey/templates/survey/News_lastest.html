@@ -1,10 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}InBest - Latest News{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'survey/css/News_lastest.css' %}">
+
+    <div class="news-container">
+        <header class="news-header">
+            <h2>가장 많이 본 뉴스</h2>
+        </header>
+        <div class="content-wrapper">
+            <!-- 뉴스 목록 -->
+            <div class="news-list">
+                <article class="news-item">
+                    <img src="{% static 'survey/images/person.jpg' %}" alt="뉴스 이미지">
+                    <div class="news-content">
+                        <h3>"거미줄을 걷는 것 같은 외로운 직장인"... 탈투 미수 1조 넘었는데</h3>
+                        <p>창업 대출에서 1700억 원의 손실을 끼친 불법 대출의 대형 금융 사고. 연관된 사건이 현재...</p>
+                        <span class="news-date">2024-11-27 19:50:17</span>
+                    </div>
+                </article>
+                <article class="news-item">
+                    <img src="{% static 'survey/images/person.jpg' %}" alt="뉴스 이미지">
+                    <div class="news-content">
+                        <h3>"K칩타" 발판 닦지만... 일본에 반도체 장비 풀릴까?</h3>
+                        <p>정부가 최근 K-반도체 전략을 발표하며 글로벌 경쟁력을 강조했으나, 일본과의 정책 마찰...</p>
+                        <span class="news-date">2024-11-27 19:05:10</span>
+                    </div>
+                </article>
+                <article class="news-item">
+                    <img src="{% static 'survey/images/person.jpg' %}" alt="뉴스 이미지">
+                    <div class="news-content">
+                        <h3>국제 유가 급등하며 정유주들 활짝</h3>
+                        <p>국제 유가 상승세가 지속되며, 정유 업계가 이익률 증가로 환호하는 가운데, 투자자 관심이...</p>
+                        <span class="news-date">2024-11-27 17:59:14</span>
+                    </div>
+                </article>
+            </div>
+            <!-- 사이드바 -->
+            <aside class="news-sidebar">
+                <h3>핫키워드</h3>
+                <ul>
+                    <li>삼성전자</li>
+                    <li>HLB</li>
+                    <li>네이버</li>
+                    <li>SK하이닉스</li>
+                    <li>현대차</li>
+                </ul>
+            </aside>
+        </div>
+    </div>
+{% endblock %}

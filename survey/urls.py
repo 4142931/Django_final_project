@@ -22,13 +22,13 @@ urlpatterns = [
     # 관심 주식
     path('mystock/', views.mystock, name='mystock'),
 
-    # 핫토픽
+    # News 경로
+    path('News_home/', views.News_home, name='News_home'),
+    path('News_lastest/', views.News_lastest, name='News_lastest'),
     path('hot_topic/', views.hot_topic, name='hot_topic'),
 
     # 주식 추천
     path('stock_recommendations/', views.stock_recommendations, name='stock_recommendations'),
-
-
 
 
 

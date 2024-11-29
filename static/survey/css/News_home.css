@@ -63,7 +63,7 @@ body {
 
 /* 뉴스 섹션 */
 .news-sections {
-    flex: 2; /* 8 비율 */
+    flex: 2.5; /* 8 비율 */
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
@@ -109,7 +109,7 @@ body {
 
 /* 뉴스 콘텐츠 */
 .news-content {
-    flex: 1; /* 4 비율 */
+    flex: 0.5; /* 4 비율 */
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;

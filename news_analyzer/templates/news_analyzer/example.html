@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}InBest - Hot Topic{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'survey/css/News_home.css' %}">
+
+    <div class="news-container">
+        <!-- 헤더는 전체 너비를 차지 -->
+        <header class="news-header">
+            <h2>가장 많이 본 뉴스</h2>
+            <ul>
+                <li>"거미줄을 걷는 것 같은 외로운 직장인"... 탈투 미수 1조 넘었는데</li>
+                <li>잘 된 이슈에도 깔끔시 - '적자투' 배후는 없다. 도지 밀약은 어떻게?</li>
+                <li>"단독 구매형 투자팀, 규제부 장비도 적어도 살 조심 없는게 " 투자 생업이</li>
+                <li>"자녀 탈락 탓" 무고자치, 철거 현장에는 단돈 미스핏</li>
+                <li>조합의 태도에 들끓은 현 아... 한달 "직선타출" 개임원화 둥복 [시그널]</li>
+            </ul>
+        </header>
+
+
+    </div>
+{% endblock %}

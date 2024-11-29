@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
 
+
 # 메인 페이지
 def index_view(request):
     return render(request, 'survey/index.html')
@@ -229,8 +230,14 @@ def mystock(request):
 
 
 
-# 핫토픽
+# News_home
 @login_required
+def News_home(request):
+    return render(request, 'survey/News_home.html')
+
+def News_lastest(request):
+    return render(request, 'survey/News_lastest.html')
+
 def hot_topic(request):
     return render(request, 'survey/hot_topic.html')
 

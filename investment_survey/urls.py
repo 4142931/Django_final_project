@@ -21,4 +21,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('survey.urls')),
+    path('news/', include('news_analyzer.urls')),  # news_analyzer의 URL 연결
 ]
