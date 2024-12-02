@@ -235,8 +235,47 @@ def mystock(request):
 def News_home(request):
     return render(request, 'survey/News_home.html')
 
-def News_lastest(request):
-    return render(request, 'survey/News_lastest.html')
+from django.shortcuts import render
+
+# 최신 뉴스 리스트 뷰
+def reporter_news(request):
+    # 더미 데이터
+    news_list = [
+        {"title": "삼성전자, 새로운 반도체 공장 발표", "reporter": "김기자", "date": "2024-12-01", "rating": 5},
+        {"title": "현대차, 전기차 수출 2배 증가", "reporter": "이기자", "date": "2024-11-30", "rating": 4},
+        {"title": "LG에너지솔루션, 3분기 실적 호조", "reporter": "박기자", "date": "2024-11-29", "rating": 3},
+        {"title": "카카오, AI 서비스 확장 발표", "reporter": "김기자", "date": "2024-12-02", "rating": 5},
+        {"title": "네이버, 글로벌 투자 증가", "reporter": "최기자", "date": "2024-11-28", "rating": 2},
+        {"title": "SK하이닉스, 메모리 반도체 시장 회복", "reporter": "김기자", "date": "2024-11-27", "rating": 4},
+    ]
+
+    # 필터링
+    filtered_news = news_list
+    date_filter = request.GET.get('date')
+    reporter_filter = request.GET.get('reporter')
+    keyword_filter = request.GET.get('keyword')
+    rating_filter = request.GET.get('rating')
+
+    if date_filter:
+        filtered_news = [news for news in filtered_news if news["date"] == date_filter]
+    if reporter_filter:
+        filtered_news = [news for news in filtered_news if reporter_filter.lower() in news["reporter"].lower()]
+    if keyword_filter:
+        filtered_news = [news for news in filtered_news if keyword_filter.lower() in news["title"].lower()]
+    if rating_filter:
+        try:
+            rating_filter = int(rating_filter)
+            filtered_news = [news for news in filtered_news if news["rating"] == rating_filter]
+        except ValueError:
+            pass  # rating_filter가 숫자가 아닌 경우 필터링하지 않음
+
+    # 별 모양 변환
+    for news in filtered_news:
+        news["rating_stars"] = "⭐" * news["rating"]
+
+    return render(request, 'survey/reporter_news.html', {"news_list": filtered_news})
+
+
 
 def hot_topic(request):
     return render(request, 'survey/hot_topic.html')

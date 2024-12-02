@@ -6,7 +6,11 @@
     <link rel="stylesheet" href="{% static 'survey/css/stock_recommendations.css' %}">
 
     <div class="stock-recommendations-container">
-        <h2 class="recommendations-title">주식 추천 리스트</h2>
+        <header class="recommendations-header">
+            <h2>주식 추천 리스트</h2>
+            <p>가장 유망한 주식을 추천드립니다. 투자 전략을 세울 때 참고해 보세요.</p>
+        </header>
+
         <div class="stock-list">
             <div class="stock-item">
                 <div class="stock-info">
@@ -16,6 +20,7 @@
                 </div>
                 <button class="details-button">자세히 보기</button>
             </div>
+
             <div class="stock-item">
                 <div class="stock-info">
                     <h3 class="stock-name">카카오</h3>
@@ -24,6 +29,7 @@
                 </div>
                 <button class="details-button">자세히 보기</button>
             </div>
+
             <!-- 추가적인 주식 항목들 -->
         </div>
     </div>

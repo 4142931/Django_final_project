@@ -1,76 +1,102 @@
-/* Hot Topic Container Styles */
+/* 전체적인 스타일 */
+body {
+    font-family: "Noto Sans KR", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0; /* 밝은 배경색을 사용하여 가독성 강화 */
+    color: #333;
+}
+
+/* 핫토픽 컨테이너 스타일 */
 .hot-topic-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 40px auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: 20px;
     background-color: #ffffff;
     padding: 30px;
-    gap: 30px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Hot Topic Box Wrapper Styles */
+/* 핫토픽 박스 래퍼 스타일 */
 .hot-topic-box-wrapper {
     display: flex;
-    gap: 150px;
-    width: 70%;
-    justify-content: space-around;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
-/* Hot Topic Box Styles */
+/* 핫토픽 박스 스타일 */
 .hot-topic-box {
     background-color: #ffffff;
-    border-radius: 15px;
+    border: 1px solid #aaa; /* 각진 모서리 강조 */
     padding: 20px;
-    width: 45%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: 2px solid #333;
+    width: 48%; /* 두 개의 컬럼으로 나눔 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
 .hot-topic-title {
-    font-size: 1.8em;
+    font-size: 24px;
+    font-weight: bold;
     margin-bottom: 15px;
+    color: #002f6c;
 }
 
 .good-news {
     color: #007bff;
+    font-weight: bold;
 }
 
 .bad-news {
     color: #d9534f;
+    font-weight: bold;
 }
 
 .hot-topic-content {
-    font-size: 1.1em;
-    color: #333;
+    font-size: 16px;
+    color: #444;
+    line-height: 1.6;
 }
 
-/* Article Box Styles */
+/* 기사 박스 스타일 */
 .hot-topic-articles {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
-    width: 80%;
     gap: 20px;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .article-box {
     background-color: #ffffff;
-    border-radius: 15px;
+    border: 1px solid #aaa; /* 각진 느낌을 강조 */
     padding: 20px;
-    width: 45%;
+    width: 48%; /* 두 개의 컬럼으로 나눔 */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ddd;
     text-align: left;
+    margin-bottom: 20px;
 }
 
 .article-title {
-    font-size: 1.5em;
-    color: #007bff;
+    font-size: 20px;
+    font-weight: bold;
+    color: #002f6c;
     margin-bottom: 10px;
+    text-decoration: underline;
 }
 
 .article-content {
-    font-size: 1em;
-    color: #555;
+    font-size: 16px;
+    color: #333;
+    line-height: 1.8;
+}
+
+/* 강조 요소 스타일 */
+.highlight {
+    color: #d9534f;
+    font-weight: bold;
 }

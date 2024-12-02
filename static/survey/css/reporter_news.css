@@ -1,0 +1,76 @@
+/* 전반적인 스타일 */
+body {
+    font-family: "Noto Sans KR", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* 필터 컨테이너 스타일 */
+.filter-container {
+    margin: 20px auto;
+    width: 90%;
+    max-width: 1200px;
+    display: flex;
+    gap: 60px;
+    align-items: center;
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.filter-container label {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #002f6c;
+}
+
+.filter-container input,
+.filter-container select,
+.filter-container button {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 0;
+}
+
+.filter-container select {
+    width: 150px;
+}
+
+/* 테이블 스타일 */
+.table-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+thead th {
+    background-color: #002f6c;
+    color: #fff;
+    text-align: left;
+    padding: 10px;
+    border-bottom: 2px solid #ddd;
+}
+
+tbody td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}

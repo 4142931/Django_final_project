@@ -73,9 +73,9 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarColor02">
                         <ul class="navbar-nav me-auto">
-<!--                            <li class="nav-item">-->
-<!--                                <a id="recommendLink" class="nav-link active bold" href="#" data-submenu="recommendSubMenu">종목 추천</a>-->
-<!--                            </li>-->
+                            <li class="nav-item ms-5">
+                                <a id="recommendLink" class="nav-link active bold" href="#" data-submenu="recommendSubMenu">종목 추천</a>
+                            </li>
 <!--                            <li class="nav-item">-->
 <!--                                <a id="interestLink" class="nav-link" href="#" data-submenu="interestSubMenu">관심주</a>-->
 <!--                            </li>-->
@@ -83,7 +83,7 @@
                                 <a id="newsLink" class="nav-link active bold" href="#" data-submenu="newsSubMenu">뉴스</a>
                             </li>
                             <li class="nav-item ms-5">
-                                <a id="mbtiLink" class="nav-link" href="{% url 'mbti_test' %}">투자성향 테스트</a>
+                                <a id="mbtiLink" class="nav-link active bold" href="{% url 'mbti_test' %}">투자성향 테스트</a>
                             </li>
                         </ul>
                         <div class="text-end">
@@ -102,18 +102,18 @@
         </div>
 
              <!-- 종목 추천 서브메뉴 -->
-<!--        <div class="container mt-2 sub-menu-container" id="recommendSubMenu" style="display: none;">-->
-<!--            <div class="sub-menu row">-->
-<!--                &lt;!&ndash; 서브메뉴 내용 &ndash;&gt;-->
-<!--                <div class="col-md-3" style="padding: 5px;">-->
-<!--                    <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">추천 홈</a>-->
-<!--                </div>-->
-<!--                <div class="col-md-3" style="padding: 5px;">-->
-<!--                    <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">AI 추천</a>-->
-<!--                </div>-->
-<!--                &lt;!&ndash; 추가 항목들을 여기에 추가하세요 &ndash;&gt;-->
-<!--            </div>-->
-<!--        </div>-->
+        <div class="container mt-2 sub-menu-container" id="recommendSubMenu" style="display: none;">
+            <div class="sub-menu row">
+                <!-- 서브메뉴 내용 -->
+                <div class="col-md-3" style="padding: 5px;">
+                    <a href="{% url 'stock_recommendations' %}" class="sub-menu-item" style="text-decoration: none; color: #000;">추천 홈</a>
+                </div>
+                <div class="col-md-3" style="padding: 5px;">
+                    <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">핫토픽 기반 주식 추천</a>
+                </div>
+                <!-- 추가 항목들을 여기에 추가하세요 -->
+            </div>
+        </div>
 
         <!-- 관심주 서브메뉴 -->
 <!--        <div class="container mt-2 sub-menu-container" id="interestSubMenu" style="display: none;">-->
@@ -134,10 +134,10 @@
                     <a href="{% url 'News_home' %}" class="sub-menu-item" style="text-decoration: none; color: #000;">뉴스 홈</a>
                 </div>
                 <div class="col-md-3" style="padding: 5px;">
-                    <a href="{% url 'News_lastest' %}" class="sub-menu-item" style="text-decoration: none; color: #000;">최신뉴스</a>
+                    <a href="{% url 'hot_topic' %}" class="sub-menu-item" style="text-decoration: none; color: #000;">핫토픽 뉴스</a>
                 </div>
                 <div class="col-md-3" style="padding: 5px;">
-                    <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">악재 호재</a>
+                    <a href="{% url 'reporter_news' %}" class="sub-menu-item" style="text-decoration: none; color: #000;">리포터 뉴스</a>
                 </div>
                 <div class="col-md-3" style="padding: 5px;">
                     <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">분석</a>

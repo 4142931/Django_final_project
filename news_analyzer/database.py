@@ -36,3 +36,19 @@ def insert_into_sqlite(title, content, url, date, author):
         print("중복된 URL로 인해 데이터가 삽입되지 않았습니다.")
     finally:
         conn.close()
+
+
+
+def fetch_news_data():
+    conn = sqlite3.connect("inbest.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT content FROM news")
+    rows = cursor.fetchall()
+    conn.close()
+    return [row[0] for row in rows]
+
+news_content = fetch_news_data()
+print(f"뉴스 데이터 {len(news_content)}건 로드 완료.")
+
+if __name__ == '__main__':
+    fetch_news_data()
