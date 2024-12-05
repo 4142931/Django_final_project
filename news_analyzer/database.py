@@ -21,34 +21,37 @@ def initialize_sqlite():
     print("SQLite 테이블 초기화 완료.")
 
 def insert_into_sqlite(title, content, url, date, author):
-    # SQLite3에 데이터 삽입
     conn = sqlite3.connect("inbest.db")
     cursor = conn.cursor()
 
     try:
+        # 중복 확인
+        cursor.execute("SELECT COUNT(*) FROM news WHERE url = ?", (url,))
+        if cursor.fetchone()[0] > 0:
+            print(f"URL 중복으로 삽입 생략: {url}")
+            return
+
+        # 데이터 삽입
         cursor.execute("""
         INSERT INTO news (title, content, url, date, author)
         VALUES (?, ?, ?, ?, ?)
         """, (title, content, url, date, author))
         conn.commit()
         print("SQLite 데이터 삽입 완료.")
-    except sqlite3.IntegrityError:
-        print("중복된 URL로 인해 데이터가 삽입되지 않았습니다.")
+    except sqlite3.Error as e:
+        print(f"SQLite 오류: {e}")
     finally:
         conn.close()
-
-
 
 def fetch_news_data():
     conn = sqlite3.connect("inbest.db")
     cursor = conn.cursor()
-    cursor.execute("SELECT content FROM news")
+    cursor.execute("SELECT title FROM news")
     rows = cursor.fetchall()
     conn.close()
     return [row[0] for row in rows]
 
-news_content = fetch_news_data()
-print(f"뉴스 데이터 {len(news_content)}건 로드 완료.")
+# news_content = fetch_news_data()
+# print(f"뉴스 데이터 {len(news_content)}건 로드 완료.")
 
-if __name__ == '__main__':
-    fetch_news_data()
+

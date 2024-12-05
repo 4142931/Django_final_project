@@ -8,94 +8,50 @@ body {
     line-height: 1.6;
 }
 
-/* 주식 추천 메인 컨테이너 스타일 */
+/* 메인 컨테이너 스타일 */
 .stock-recommendations-container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 40px auto;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
+    width: 90%; /* 너비 90% */
+    max-width: 1200px; /* 최대 너비 1200px */
+    margin: 40px auto; /* 중앙 정렬 */
+    padding: 20px;
     background-color: #ffffff;
-    padding: 30px;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* 추천 헤더 스타일 */
-.recommendations-header {
+/* 헤더 스타일 */
+.stock-header {
+    background-color: #ffffff;
+    padding: 25px;
+    border: 1px solid #002f6c;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
     text-align: center;
     margin-bottom: 20px;
 }
 
-.recommendations-header h2 {
-    font-size: 28px;
-    font-weight: bold;
-    color: #007bff;
-    margin-bottom: 10px;
-}
-
-.recommendations-header p {
-    font-size: 18px;
-    color: #444;
-}
-
-/* 주식 리스트 스타일 */
-.stock-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.stock-item {
-    background-color: #ffffff;
-    border: 1px solid #ccc;
-    padding: 20px;
-    width: 48%;
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.stock-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-/* 주식 정보 스타일 */
-.stock-info {
-    text-align: left;
-}
-
-.stock-name {
-    font-size: 22px;
-    font-weight: bold;
-    color: #002f6c;
-    margin-bottom: 10px;
-}
-
-.stock-description {
-    font-size: 16px;
-    color: #555;
-    margin-bottom: 10px;
-    line-height: 1.6;
-}
-
-.stock-price {
-    font-size: 18px;
-    color: #007bff;
+/* 추천 종목 테이블 스타일 */
+.recommendations-table h3 {
+    margin-bottom: 15px;
     font-weight: bold;
 }
 
-/* 자세히 보기 버튼 스타일 */
-.details-button {
-    background-color: #007bff;
+.recommendations-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.recommendations-table table thead {
+    background-color: #002366;
     color: #ffffff;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s;
 }
 
-.details-button:hover {
-    background-color: #0056b3;
+.recommendations-table table th,
+.recommendations-table table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #dddddd;
+}
+
+.recommendations-table table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
