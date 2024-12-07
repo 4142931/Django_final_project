@@ -1,5 +1,5 @@
 body {
-    background-color: #fff;
+    background-color: #f5f5f5;
 }
 
 .header {
@@ -65,4 +65,13 @@ body {
 .cta-button:hover {
     background-color: #fcb24a; /* hover 색상 */
     color: #2c2c2c;
+}
+
+h3.mb-3 {
+    font-size: 18px; /* 글씨 크기: 적당히 작은 크기로 조정 */
+    font-weight: 500; /* 글씨 두께: 중간 두께 */
+    color: #333; /* 어두운 회색으로 가독성 향상 */
+    margin-bottom: 15px; /* 아래쪽 여백 */
+    line-height: 1.5; /* 줄 간격을 넉넉히 설정 */
+    font-weight: bold;
 }

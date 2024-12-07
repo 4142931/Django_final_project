@@ -19,6 +19,7 @@ body {
     padding: 30px;
     border: 1px solid #ddd;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 }
 
 /* 핫토픽 박스 래퍼 스타일 */
@@ -32,7 +33,7 @@ body {
 /* 핫토픽 박스 스타일 */
 .hot-topic-box {
     background-color: #ffffff;
-    border: 1px solid #aaa; /* 각진 모서리 강조 */
+    border: 1px solid #aaa;
     padding: 20px;
     width: 48%; /* 두 개의 컬럼으로 나눔 */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);

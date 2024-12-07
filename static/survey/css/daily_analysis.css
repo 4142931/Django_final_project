@@ -1,0 +1,82 @@
+body {
+    background-color: #f5f5f5;
+}
+
+/* 전체 세션 컨테이너 */
+.analysis-session {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 분석기준 날짜 섹션 */
+.analysis-date {
+    text-align: right;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+}
+
+/* 내부 그리드 레이아웃 */
+.analysis-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3열 */
+    gap: 20px;
+    text-align: center;
+}
+
+/* 각 그리드 아이템 */
+.grid-item {
+    padding: 20px;
+    border: 1px solid #e6e6e6;
+    background-color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 캔버스 및 관계망 크기 */
+canvas {
+    width: 100%; /* 콘텐츠에 맞게 조정 */
+    height: auto;
+    max-width: 300px;
+    max-height: 300px;
+}
+
+#relationNetwork {
+    width: 100%;
+    height: auto;
+    max-width: 300px;
+    max-height: 300px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .analysis-grid {
+        grid-template-columns: repeat(2, 1fr); /* 태블릿: 2열 */
+    }
+}
+
+@media (max-width: 480px) {
+    .analysis-grid {
+        grid-template-columns: 1fr; /* 모바일: 1열 */
+    }
+}
+
+
+
+.stock-header {
+    background-color: #ffffff;
+    padding: 25px;
+    border: 1px solid #002f6c;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-bottom: 20px;
+}

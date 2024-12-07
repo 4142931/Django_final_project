@@ -98,32 +98,19 @@
             </nav>
         </div>
 
-<!--             &lt;!&ndash; 종목 추천 서브메뉴 &ndash;&gt;-->
-<!--        <div class="container mt-2 sub-menu-container" id="recommendSubMenu" style="display: none;">-->
-<!--            <div class="sub-menu row">-->
-<!--                &lt;!&ndash; 서브메뉴 내용 &ndash;&gt;-->
-<!--                <div class="col-md-3" style="padding: 5px;">-->
-<!--                    <a href="{% url 'stock_recommendations' %}" class="sub-menu-item" style="text-decoration: none; color: #000;">추천 홈</a>-->
-<!--                </div>-->
-<!--                <div class="col-md-3" style="padding: 5px;">-->
-<!--                    <a href="#" class="sub-menu-item" style="text-decoration: none; color: #000;">핫토픽 기반 주식 추천</a>-->
-<!--                </div>-->
-<!--                &lt;!&ndash; 추가 항목들을 여기에 추가하세요 &ndash;&gt;-->
-<!--            </div>-->
-<!--        </div>-->
 
         <!-- 뉴스 서브메뉴 -->
         <div class="container mt-2 sub-menu-container" id="newsSubMenu" style="display: none;">
             <div class="sub-menu row">
                 <!-- 기존 뉴스 서브메뉴 내용 -->
-<!--                <div class="col-md-3" style="padding: 5px;">-->
-<!--                    <a href="{% url 'News_home' %}" class="sub-menu-item" style="text-decoration: none; color: #000;">뉴스 홈</a>-->
-<!--                </div>-->
+                <div class="col-md-3" style="padding: 5px;">
+                    <a href="{% url 'News_home' %}" class="sub-menu-item" style="text-decoration: none; color: #000;">뉴스 홈</a>
+                </div>
                 <div class="col-md-3" style="padding: 5px;">
                     <a href="{% url 'hot_topic' %}" class="sub-menu-item" style="text-decoration: none; color: #000;">핫토픽 뉴스</a>
                 </div>
                 <div class="col-md-3" style="padding: 5px;">
-                    <a href="{% url 'reporter_news' %}" class="sub-menu-item" style="text-decoration: none; color: #000;">리포터 뉴스</a>
+                    <a href="{% url 'daily_analysis' %}" class="sub-menu-item" style="text-decoration: none; color: #000;">일별 분석</a>
                 </div>
             </div>
         </div>
