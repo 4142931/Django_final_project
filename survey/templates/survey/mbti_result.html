@@ -9,22 +9,29 @@
 
 <div class="container mt-5">
     <div class="card text-center shadow">
+        <p class="text-highlight-bg">
+            <span class="text-highlight">당신의 타입은?</span>
+        </p>
+
+        <div>
+             <img src="{% static image_path %}" alt="test_image" class="rounded-image" style="width: 150px;">
+        </div>
+
+
         <div class="card-body">
-            <img src="{% static image_path %}" alt="test_image" class="my-3 rounded-image" style="width: 150px;">
-            <h3 class="fw-bold">{{ result_type }}</h3>
-            <h4 class="text-danger">{{ mbti_description }}</h4>
+            <h5 class="text-danger01">{{ mbti_description }}</h5>
         </div>
 
         <div style="text-align: left; margin-left: 20px; margin-right: 20px;">
             <div class="my-4">
-                <h5 class="fw-bold text-danger">나는 이런 사람이에요!</h5>
+                <p class="highlight">나는 이런 사람이에요!</p>
                 <ul class="list-unstyled">
                     <li>{{ detailed_description02 }}</li>
                 </ul>
             </div>
 
             <div class="my-4">
-                <h5 class="fw-bold text-danger">나를 위한 투자 팁</h5>
+                <p class="highlight">나를 위한 투자 팁</p>
                 <ul class="list-unstyled">
                     <li>{{ detailed_description03 }}</li>
                 </ul>

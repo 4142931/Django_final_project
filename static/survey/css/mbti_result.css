@@ -1,33 +1,71 @@
+/* 배경색 */
 body {
-    background-color: #f5f5f5;
-    font-family: 'Arial', sans-serif;
+    background-color: #fffae6;
+    font-family: 'Noto Sans', Arial, sans-serif; /* 더 부드러운 글꼴 */
+    color: #333; /* 텍스트 기본 색상 */
 }
 
+/* 중앙 카드 관련 */
 .card {
     background-color: #fff;
-    border-radius: 10px;
+    border-radius: 5px; /* 카드 모서리 둥글게 */
     max-width: 500px;
     margin: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 추가 */
     overflow: hidden;
+    border: 1px solid #eaeaea; /* 카드 외곽선 */
 }
-
 .card-body {
-    padding: 20px;
+    padding: 25px;
+    line-height: 1.0; /* 가독성을 위한 줄 간격 */
 }
 
-.text-danger {
-    color: #ffc107  /* 노란색으로 강조 */
+/* 문단 간격 */
+p {
+    margin: 10px 0; /* 문단 간격 */
 }
 
-.text-muted {
-    color: #6c757d;
+/* =============================================================== */
+
+/* 당신의 타입은? */
+.text-highlight {
+    color: #f9a825;
+    font-weight: bold; /* 텍스트 굵게 */
+    font-size: 2rem; /* 적당한 크기의 텍스트 */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* 텍스트 그림자 */
+    display: inline-block; /* 배경 색상을 텍스트에 맞게 적용 */
+
 }
 
-.list-unstyled li {
-    margin: 5px 0;
-}
-
+/* 동물 이미지 */
 .rounded-image {
-    border-radius: 50%; /* 원형으로 라운딩 */
-    overflow: hidden; /* 이미지를 벗어나는 부분 숨김 */
+    border-radius: 50%; /* 둥근 모서리 */
+    overflow: hidden;
+    margin-top: 20px;
+    margin-bottom: -12px; /* 이미지와 텍스트 사이 간격 조정 */
+
 }
+
+/* 결과 제목 텍스트 */
+.text-danger01 {
+    background-color: #fff6da; /* 배경 색상 */
+    padding: 5px 10px; /* 텍스트 주위 여백 */
+    border-radius: 3px; /* 모서리를 둥글게 */
+    display: inline-block; /* 배경색이 글씨에 딱 맞도록 설정 */
+    color: #333; /* 글씨 색상 */
+    margin-top: 0; /* 제목 텍스트 위쪽 간격 제거 */
+}
+
+
+/* 본문 문단 제목 */
+.highlight {
+    background-color: #fff6da; /* 배경 색상 */
+    padding: 5px 10px; /* 텍스트 주위 여백 */
+    border-radius: 3px; /* 모서리를 둥글게 */
+    display: inline-block; /* 배경색이 글씨에 딱 맞도록 설정 */
+    font-weight: bold; /* 강조를 위해 글씨 두껍게 */
+    color: #333; /* 글씨 색상 */
+}
+
+
+
