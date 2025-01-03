@@ -3,7 +3,9 @@ body {
     background-color: #fffae6;
     font-family: 'Noto Sans', Arial, sans-serif; /* 더 부드러운 글꼴 */
     color: #333; /* 텍스트 기본 색상 */
+
 }
+
 
 /* 중앙 카드 관련 */
 .card {
@@ -25,6 +27,9 @@ p {
     margin: 10px 0; /* 문단 간격 */
 }
 
+p.highlight {
+    margin-bottom: -20px; /* 하단 여백 최소화 */
+}
 /* =============================================================== */
 
 /* 당신의 타입은? */
@@ -39,7 +44,7 @@ p {
 
 /* 동물 이미지 */
 .rounded-image {
-    border-radius: 50%; /* 둥근 모서리 */
+    /* border-radius: 50%; /* 둥근 모서리 */
     overflow: hidden;
     margin-top: 20px;
     margin-bottom: -12px; /* 이미지와 텍스트 사이 간격 조정 */
@@ -48,14 +53,22 @@ p {
 
 /* 결과 제목 텍스트 */
 .text-danger01 {
+    padding: 5px 10px; /* 텍스트 주위 여백 */
+    border-radius: 5px; /* 모서리를 둥글게 */
+    display: inline-block; /* 배경색이 글씨에 딱 맞도록 설정 */
+    font-weight: bold; /* 강조를 위해 글씨 두껍게 */
+    color: #333; /* 글씨 색상 */
+}
+/* 결과 소제목 텍스트 */
+.text-danger02 {
     background-color: #fff6da; /* 배경 색상 */
     padding: 5px 10px; /* 텍스트 주위 여백 */
     border-radius: 3px; /* 모서리를 둥글게 */
     display: inline-block; /* 배경색이 글씨에 딱 맞도록 설정 */
     color: #333; /* 글씨 색상 */
+    font-weight: bold; /* 강조를 위해 글씨 두껍게 */
     margin-top: 0; /* 제목 텍스트 위쪽 간격 제거 */
 }
-
 
 /* 본문 문단 제목 */
 .highlight {
@@ -66,6 +79,9 @@ p {
     font-weight: bold; /* 강조를 위해 글씨 두껍게 */
     color: #333; /* 글씨 색상 */
 }
+
+
+
 
 
 
