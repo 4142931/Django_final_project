@@ -1,5 +1,10 @@
+from collections import defaultdict
+import re
+
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+
+from news_analyzer.database import fetch_news_data
 from .models import Question, InvestmentResult
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
@@ -81,7 +86,67 @@ def stock_recommendations(request):
 
 # News
 def News_home(request):
-    return render(request, 'survey/News_home.html')
+    news_data = fetch_news_data()
+    recent_news = []
+
+    # 최신 뉴스 (5개)
+    for title, content in news_data[:5]:
+        recent_news.append({
+            'title': title,
+            'url': None
+        })
+
+    # 뉴스 카테고리 정의
+    categories = {
+        '금융': r'금융|은행|저축|대출|이자',
+        '증권': r'증권|주식|코스피|코스닥|채권',
+        '부동산': r'부동산|아파트|주택|전세|월세',
+        '경제 일반': r'경제|산업|무역|수출|기업'
+    }
+
+    categorized_news = defaultdict(list)
+
+    # 뉴스 데이터를 카테고리별로 분류
+    for title, content in news_data:
+        categorized = False
+        for category, pattern in categories.items():
+            if re.search(pattern, title) or re.search(pattern, content):
+                if len(categorized_news[category]) < 4:
+                    categorized_news[category].append({
+                        'title': title,
+                        'url': None  # URL 데이터가 없으므로 None 처리
+                    })
+                    categorized = True
+                    break
+
+        # 분류되지 않은 뉴스는 '경제 일반'에 추가
+        if not categorized and len(categorized_news['경제 일반']) < 4:
+            categorized_news['경제 일반'].append({
+                'title': title,
+                'url': None  # URL 데이터가 없으므로 None 처리
+            })
+
+    # 핫키워드 추출
+    word_count = defaultdict(int)
+    for title, content in news_data:
+        words = re.findall(r'\w+', title)
+        for word in words:
+            if len(word) >= 2:  # 2글자 이상의 단어만 카운트
+                word_count[word] += 1
+
+    # 가장 많이 등장한 5개 단어를 핫키워드로 선정
+    keywords = sorted(word_count.items(), key=lambda x: x[1], reverse=True)[:5]
+    hot_keywords = [keyword for keyword, _ in keywords]
+
+    # 컨텍스트 생성 및 렌더링
+    context = {
+        'recent_news': recent_news,
+        'categorized_news': dict(categorized_news),
+        'hot_keywords': hot_keywords,
+    }
+    return render(request, 'survey/News_home.html', context)
+
+
 @login_required
 def hot_topic(request):
     return render(request, 'survey/hot_topic.html')
