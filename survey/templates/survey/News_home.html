@@ -10,62 +10,39 @@
         <header class="news-header">
             <h2>가장 많이 본 뉴스</h2>
             <ul>
-                <li>"거미줄을 걷는 것 같은 외로운 직장인"... 탈투 미수 1조 넘었는데</li>
-                <li>잘 된 이슈에도 깔끔시 - '적자투' 배후는 없다. 도지 밀약은 어떻게?</li>
-                <li>"단독 구매형 투자팀, 규제부 장비도 적어도 살 조심 없는게 " 투자 생업이</li>
-                <li>"자녀 탈락 탓" 무고자치, 철거 현장에는 단돈 미스핏</li>
-                <li>조합의 태도에 들끓은 현 아... 한달 "직선타출" 개임원화 둥복 [시그널]</li>
+                {% for news in recent_news %}
+                    <li><a href="{{ news.url }}" target="_blank">{{ news.title }}</a></li>
+                {% empty %}
+                    <li>최신 뉴스가 없습니다.</li>
+                {% endfor %}
             </ul>
         </header>
 
         <!-- 본문은 좌측(8)과 우측(4)로 나눔 -->
         <div class="content-wrapper">
             <section class="news-sections">
-                <div class="section">
-                    <h3>금융</h3>
-                    <ul>
-                        <li>"단독 구매형 투자팀 비탈압니 벌금"</li>
-                        <li>디에스 "상품 소송안 3D 결과 고 3자규"</li>
-                        <li>목돈몰면 기준 고객 인도," 수요 학보- 금다배정</li>
-                        <li>HUG, 조사량</li>
-                    </ul>
-                </div>
-                <div class="section">
-                    <h3>증권</h3>
-                    <ul>
-                        <li>DB하이니스 스탑팅전, KGI 고소..</li>
-                        <li>작사면 40% 증도 중 방구와 텐트 "그..</li>
-                        <li>작 매석해 최고 과신한원 변종 "공</li>
-                        <li>개빈 타율 직후 도</li>
-                    </ul>
-                </div>
-                <div class="section">
-                    <h3>부동산</h3>
-                    <ul>
-                        <li>네트 퍼블 과 독박진상 "싸</li>
-                        <li>블랙내중금 파괴 엄살파충 타율과 송사 </li>
-                        <li>여기 안의 지포구전</li>
-                    </ul>
-                </div>
-                <div class="section">
-                    <h3>경제 일반</h3>
-                    <ul>
-                        <li>작금달트 신용 시그.. 신관속 디그다독 "</li>
-                        <li>실수입 코렉스를 교착까지 후원했듬 정비는 대도" 변동</li>
-                        <li>우지다 삼수거 도관 "소지조사  미스핏의 두흑남 오리부터"</li>
-                        <li>큰 가능성 원시리, SKT, 전포시 추</li>
-                    </ul>
-                </div>
+                {% for category, news_list in categorized_news.items %}
+                    <div class="section">
+                        <h3>{{ category }}</h3>
+                        <ul>
+                            {% for news in news_list %}
+                                <li><a href="{{ news.url }}" target="_blank">{{ news.title }}</a></li>
+                            {% empty %}
+                                <li>해당 카테고리의 뉴스가 없습니다.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
             </section>
             <div class="news-content">
                 <aside class="hot-keywords">
                     <h3>핫키워드</h3>
                     <ul>
-                        <li>삼성전자</li>
-                        <li>HLB</li>
-                        <li>네이버</li>
-                        <li>SK하이닉스</li>
-                        <li>현대차</li>
+                        {% for keyword in hot_keywords %}
+                            <li>{{ keyword }}</li>
+                        {% empty %}
+                            <li>키워드가 없습니다.</li>
+                        {% endfor %}
                     </ul>
                 </aside>
             </div>
