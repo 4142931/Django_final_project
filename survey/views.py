@@ -90,10 +90,10 @@ def News_home(request):
     recent_news = []
 
     # 최신 뉴스 (5개)
-    for title, content in news_data[:5]:
+    for title, content, url in news_data[:5]:
         recent_news.append({
             'title': title,
-            'url': None
+            'url': url,
         })
 
     # 뉴스 카테고리 정의
@@ -107,14 +107,14 @@ def News_home(request):
     categorized_news = defaultdict(list)
 
     # 뉴스 데이터를 카테고리별로 분류
-    for title, content in news_data:
+    for title, content, url in news_data:
         categorized = False
         for category, pattern in categories.items():
             if re.search(pattern, title) or re.search(pattern, content):
                 if len(categorized_news[category]) < 4:
                     categorized_news[category].append({
                         'title': title,
-                        'url': None  # URL 데이터가 없으므로 None 처리
+                        'url': url  # URL 추가
                     })
                     categorized = True
                     break
@@ -123,12 +123,12 @@ def News_home(request):
         if not categorized and len(categorized_news['경제 일반']) < 4:
             categorized_news['경제 일반'].append({
                 'title': title,
-                'url': None  # URL 데이터가 없으므로 None 처리
+                'url': url  # URL 추가
             })
 
     # 핫키워드 추출
     word_count = defaultdict(int)
-    for title, content in news_data:
+    for title, content, url in news_data:
         words = re.findall(r'\w+', title)
         for word in words:
             if len(word) >= 2:  # 2글자 이상의 단어만 카운트

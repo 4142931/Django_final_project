@@ -58,18 +58,24 @@ def insert_into_sqlite(title, content, url, date, author):
 # news_content = fetch_news_data()
 # print(f"뉴스 데이터 {len(news_content)}건 로드 완료.")
 
-DB_PATH = "C:/Django_final_project/news_analyzer/news.db"
+DB_PATH = "C:/Django_final_project/news_analyzer/inbest.db"
 def fetch_news_data():
 
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     try:
         # 테이블에서 데이터 가져오기
-        cursor.execute("SELECT title, content FROM news_details_naver LIMIT 100;")
+        cursor.execute("SELECT title, content, url FROM news LIMIT 100;")
         rows = cursor.fetchall()  # [(제목, 내용), (제목, 내용), ...]
+        print(rows)  # 가져온 데이터 출력
     except sqlite3.Error as e:
         print(f"SQLite 오류: {e}")
         rows = []
     finally:
         conn.close()
     return rows
+
+
+if __name__ == '__main__':
+    res = fetch_news_data()
+    print(res)
