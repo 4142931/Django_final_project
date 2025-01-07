@@ -4,6 +4,14 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'survey/css/daily_analysis.css' %}">
+<style>
+    @font-face {
+        font-family: 'Pretendard-Regular';
+        src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+        font-weight: 400;
+        font-style: normal;
+    }
+</style>
 
 <div class="analysis-session">
     <!-- Header section -->
@@ -22,11 +30,13 @@
             <h4>키워드 - 오늘의 키워드</h4>
             <canvas id="wordCloud" width="300" height="300"></canvas>
         </div>
+
         <!-- 키워드 관계망 -->
         <div class="grid-item">
             <h4>키워드 - 관련 키워드 관계망</h4>
             <div id="relationNetwork" style="width: 300px; height: 300px;"></div>
         </div>
+
         <!-- 보도 현황 그래프 -->
         <div class="grid-item">
             <h4>언론사 - 보도 현황</h4>
@@ -34,4 +44,46 @@
         </div>
     </div>
 </div>
+
+<!-- 워드클라우드 스크립트 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            const cloudData = {{ wordcloud_data|safe }};
+            console.log('Cloud data:', cloudData);
+
+            if (!cloudData || cloudData.length === 0) {
+                throw new Error('워드클라우드 데이터가 없습니다');
+            }
+
+            const canvas = document.getElementById('wordCloud');
+            const options = {
+                list: cloudData.map(item => [item.text, item.size]),
+                gridSize: 8,
+                weightFactor: 2,
+                fontFamily: 'Pretendard-Regular',
+                color: '#1565C0',
+                backgroundColor: 'white',
+                rotateRatio: 0.3,
+                minSize: 12,
+                shape: 'circle',
+                drawOutOfBound: false,
+                shrinkToFit: true
+            };
+
+            WordCloud(canvas, options);
+            console.log('WordCloud initialized');
+
+        } catch (error) {
+            console.error('Error:', error);
+            const canvas = document.getElementById('wordCloud');
+            const ctx = canvas.getContext('2d');
+            ctx.font = '14px Pretendard-Regular';
+            ctx.fillStyle = '#666';
+            ctx.textAlign = 'center';
+            ctx.fillText('워드클라우드를 생성할 수 없습니다', canvas.width/2, canvas.height/2);
+        }
+    });
+</script>
 {% endblock %}
