@@ -28,7 +28,7 @@ def signup_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user) # 회원가입 후 자동 로그인 처리
-            return redirect('index')  # 홈 페이지로 리디렉션
+            return redirect('News_home')  # 홈 페이지로 리디렉션
     else:
         form = UserCreationForm()
     return render(request, 'survey/signup.html', {'form': form})
