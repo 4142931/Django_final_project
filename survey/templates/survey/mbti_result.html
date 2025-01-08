@@ -17,25 +17,27 @@
              <img src="{% static image_path %}" alt="test_image" class="rounded-image" style="width: 150px;">
         </div>
 
-
-        <div class="card-body">
-            <h5 class="text-danger01">{{ mbti_description }}</h5>
+         <div class="card-body">
+            <h3 class="text-danger01">{{ mbti_description }}</h3>
+             <p class="text-danger02">{{ detailed_description01 }}</p>
         </div>
 
         <div style="text-align: left; margin-left: 20px; margin-right: 20px;">
             <div class="my-4">
                 <p class="highlight">나는 이런 사람이에요!</p>
                 <ul class="list-unstyled">
-                    <li>{{ detailed_description02 }}</li>
+                    <li>{{ detailed_description02|linebreaks }}</li>
                 </ul>
             </div>
 
             <div class="my-4">
                 <p class="highlight">나를 위한 투자 팁</p>
-                <ul class="list-unstyled">
-                    <li>{{ detailed_description03 }}</li>
-                </ul>
+               <ul class="list-unstyled">
+                 <li>{{ detailed_description03|linebreaks }}</li>
+               </ul>
             </div>
+
+
         </div>
     </div>
 </div>

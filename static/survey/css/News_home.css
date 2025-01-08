@@ -8,6 +8,21 @@ body {
     line-height: 1.6;
 }
 
+/* 기본 링크 스타일 */
+.news-header ul li a,
+.section ul li a {
+    color: #444; /* 기본 텍스트 색상 */
+    text-decoration: none; /* 기본 밑줄 제거 */
+    font-weight: 500; /* 폰트 굵기 */
+}
+
+/* 호버 시 링크 스타일 */
+.news-header ul li a:hover,
+.section ul li a:hover {
+    color: #0070f3; /* 호버 시 텍스트 색상 */
+    text-decoration: underline; /* 호버 시 밑줄 추가 */
+}
+
 /* 메인 컨테이너 스타일 */
 .news-container {
     width: 90%;

@@ -1,6 +1,4 @@
 from preprocessing import preprocess_article
-from vectorization import tfidf_vectorize, train_svm, predict_labels, calculate_similarity
-from analysis import cluster_and_prioritize_articles
 from database import fetch_news_data
 
 def main():
@@ -26,11 +24,6 @@ def main():
     for i, content in enumerate(processed_contents[:5]):
         print(f"{i + 1}. {content}")
 
-    # Step 3: TF-IDF 벡터화 및 SVM 학습
-    print("\nStep 3: TF-IDF 벡터화 및 SVM 학습")
-    labels = [1 if "상승" in content else 0 for content in processed_contents]  # 예시 레이블링
-    tfidf_matrix, vectorizer = tfidf_vectorize(processed_contents)
-    svm_model = train_svm(tfidf_matrix, labels)
 
 if __name__ == "__main__":
     main()
