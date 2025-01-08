@@ -4,6 +4,7 @@ import sqlite3
 from collections import defaultdict
 import re
 
+import pandas as pd
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 
@@ -152,8 +153,100 @@ def News_home(request):
 
 @login_required
 def hot_topic(request):
-    return render(request, 'survey/hot_topic.html')
+    try:
+        conn = sqlite3.connect("news_analyzer/inbest.db")
+        cursor = conn.cursor()
 
+        cursor.execute("""
+           SELECT title, content 
+           FROM news 
+           ORDER BY date DESC 
+           LIMIT 50
+       """)
+
+        news_data = cursor.fetchall()
+
+        # 감성어 사전 로드
+        base_path = os.path.join(os.path.dirname(__file__), '..', 'news_analyzer', 'csv')
+        senti_lex = pd.read_csv(os.path.join(base_path, 'SentiWord_Dict.csv'))
+        positive_words = set(senti_lex[senti_lex['polarity'] > 0]['word'])
+        negative_words = set(senti_lex[senti_lex['polarity'] < 0]['word'])
+
+        positive_news = []
+        negative_news = []
+        main_positive_news = None
+        main_negative_news = None
+
+        # 뉴스 분류
+        for title, content in news_data:
+            words = set(re.findall(r'[가-힣]+', title))
+            pos_score = len(words & positive_words)
+            neg_score = len(words & negative_words)
+
+            news_item = {
+                'title': title,
+                'content': content
+            }
+
+            if pos_score > neg_score:
+                if not main_positive_news:  # 첫 번째 긍정 뉴스를 메인 뉴스로
+                    main_positive_news = news_item
+                elif len(positive_news) < 4:  # 나머지는 목록에
+                    positive_news.append(news_item)
+            elif neg_score > pos_score:
+                if not main_negative_news:  # 첫 번째 부정 뉴스를 메인 뉴스로
+                    main_negative_news = news_item
+                elif len(negative_news) < 4:  # 나머지는 목록에
+                    negative_news.append(news_item)
+
+        # 부족한 기사 채우기
+        if not main_positive_news:
+            main_positive_news = {
+                'title': '오늘은 주요 호재가 없습니다',
+                'content': '현재 시장에 주요한 호재성 뉴스가 없습니다.'
+            }
+        if not main_negative_news:
+            main_negative_news = {
+                'title': '오늘은 주요 악재가 없습니다',
+                'content': '현재 시장에 주요한 악재성 뉴스가 없습니다.'
+            }
+
+        while len(positive_news) < 4:
+            positive_news.append({
+                'title': '',
+                'content': '추가 호재 기사가 없습니다.'
+            })
+        while len(negative_news) < 4:
+            negative_news.append({
+                'title': '',
+                'content': '추가 악재 기사가 없습니다.'
+            })
+
+        context = {
+            'main_positive_news': main_positive_news,
+            'main_negative_news': main_negative_news,
+            'positive_news': positive_news,
+            'negative_news': negative_news,
+        }
+
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        default_item = {
+            'title': '데이터를 불러올 수 없습니다.',
+            'content': '내용을 불러올 수 없습니다.'
+        }
+        context = {
+            'main_positive_news': default_item,
+            'main_negative_news': default_item,
+            'positive_news': [default_item] * 4,
+            'negative_news': [default_item] * 4
+        }
+
+    finally:
+        if 'conn' in locals():
+            conn.close()
+
+    return render(request, 'survey/hot_topic.html', context)
 
 @login_required
 def daily_analysis(request):
