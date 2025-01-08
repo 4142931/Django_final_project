@@ -65,17 +65,11 @@ def fetch_news_data():
     cursor = conn.cursor()
     try:
         # 테이블에서 데이터 가져오기
-        cursor.execute("SELECT title, content, url FROM news LIMIT 100;")
-        rows = cursor.fetchall()  # [(제목, 내용), (제목, 내용), ...]
-        print(rows)  # 가져온 데이터 출력
+        cursor.execute("SELECT title, content, url FROM news ORDER BY date DESC")
+        rows = cursor.fetchall()  # [(제목, 내용, url), (제목, 내용, url), ...]
     except sqlite3.Error as e:
         print(f"SQLite 오류: {e}")
         rows = []
     finally:
         conn.close()
     return rows
-
-
-if __name__ == '__main__':
-    res = fetch_news_data()
-    print(res)
