@@ -162,11 +162,11 @@ def hot_topic(request):
         cursor = conn.cursor()
 
         cursor.execute("""
-           SELECT title, content, url
+           SELECT title, content 
            FROM news 
            ORDER BY date DESC 
            LIMIT 50
-        """)
+       """)
 
         news_data = cursor.fetchall()
 
@@ -182,15 +182,14 @@ def hot_topic(request):
         main_negative_news = None
 
         # 뉴스 분류
-        for title, content, url in news_data:
+        for title, content in news_data:
             words = set(re.findall(r'[가-힣]+', title))
             pos_score = len(words & positive_words)
             neg_score = len(words & negative_words)
 
             news_item = {
                 'title': title,
-                'content': content,
-                'url': url  # URL 추가
+                'content': content
             }
 
             if pos_score > neg_score:
@@ -208,27 +207,23 @@ def hot_topic(request):
         if not main_positive_news:
             main_positive_news = {
                 'title': '오늘은 주요 호재가 없습니다',
-                'content': '현재 시장에 주요한 호재성 뉴스가 없습니다.',
-                'url': '#'
+                'content': '현재 시장에 주요한 호재성 뉴스가 없습니다.'
             }
         if not main_negative_news:
             main_negative_news = {
                 'title': '오늘은 주요 악재가 없습니다',
-                'content': '현재 시장에 주요한 악재성 뉴스가 없습니다.',
-                'url': '#'
+                'content': '현재 시장에 주요한 악재성 뉴스가 없습니다.'
             }
 
         while len(positive_news) < 4:
             positive_news.append({
                 'title': '',
-                'content': '추가 호재 기사가 없습니다.',
-                'url': '#'
+                'content': '추가 호재 기사가 없습니다.'
             })
         while len(negative_news) < 4:
             negative_news.append({
                 'title': '',
-                'content': '추가 악재 기사가 없습니다.',
-                'url': '#'
+                'content': '추가 악재 기사가 없습니다.'
             })
 
         context = {
@@ -242,8 +237,7 @@ def hot_topic(request):
         print(f"Error: {str(e)}")
         default_item = {
             'title': '데이터를 불러올 수 없습니다.',
-            'content': '내용을 불러올 수 없습니다.',
-            'url': '#'
+            'content': '내용을 불러올 수 없습니다.'
         }
         context = {
             'main_positive_news': default_item,
@@ -290,124 +284,187 @@ def daily_analysis(request):
             return datetime.now().date()
 
     try:
-        # inbest.db 연결
-        db_path = os.path.join("news_analyzer", "inbest.db")
-        conn = sqlite3.connect(db_path)
+        # 데이터베이스 경로 설정
+        inbest_db_path = os.path.join("news_analyzer", "inbest.db")
+        news_db_path = os.path.join("news_analyzer", "news.db")
+
+        # 데이터베이스 연결
+        conn = sqlite3.connect(inbest_db_path)
         cursor = conn.cursor()
 
-        # 7일간의 뉴스 데이터 조회
+        # news.db 데이터베이스 연결
+        cursor.execute(f"ATTACH DATABASE '{news_db_path}' AS news_db")
+
+        # 데이터베이스의 최신 날짜를 기준으로 7일 전 날짜 계산
         cursor.execute("""
-            SELECT title, content, author, date 
-            FROM news 
-            WHERE date >= datetime('now', '-7 day')
-            ORDER BY date DESC;
+            SELECT MAX(date) as latest_date 
+            FROM news_db.news
         """)
+        latest_date_str = cursor.fetchone()[0]
+        latest_date = datetime.strptime(latest_date_str, '%Y-%m-%d')
+        seven_days_ago = (latest_date - timedelta(days=7)).strftime('%Y-%m-%d')
 
-        news_data = cursor.fetchall()
-        print(f"Total news data fetched: {len(news_data)}")
 
-        if news_data:
-            # 데이터프레임 생성
-            df = pd.DataFrame(news_data, columns=['title', 'content', 'author', 'date'])
+        # 7일간의 언론사별 일간 기사 수 조회
+        cursor.execute("""
+            SELECT 
+                date(date) as daily_date, 
+                press, 
+                COUNT(*) as article_count
+            FROM news_db.news
+            WHERE date >= ?
+            GROUP BY daily_date, press
+            ORDER BY daily_date, article_count DESC
+        """, (seven_days_ago,))
 
-            # 날짜 변환
-            df['date'] = df['date'].apply(convert_kr_date)
+        # 전체 데이터 가져오기
+        press_daily_data = cursor.fetchall()
 
-            print(f"DataFrame shape: {df.shape}")
+        # 상위 7개 언론사 선택
+        cursor.execute("""
+            SELECT 
+                press, 
+                COUNT(*) as total_count
+            FROM news_db.news 
+            WHERE date >= ?
+            GROUP BY press
+            ORDER BY total_count DESC
+            LIMIT 7
+        """, (seven_days_ago,))
+        top_press = [row[0] for row in cursor.fetchall()]
 
-            # 워드클라우드 데이터 생성
-            cloud_data = extract_keywords(df[['title', 'content', 'author']].values.tolist())
-            print(f"Word cloud data length: {len(cloud_data)}")
+        # 언론사 보도 현황 데이터프레임 생성
+        if press_daily_data and top_press:
+            press_df = pd.DataFrame(press_daily_data, columns=['date', 'press', 'count'])
+            press_df = press_df[press_df['press'].isin(top_press)]
 
-            # 카테고리 정의
-            categories = {
-                '경제': ['금리', '주식', 'GDP', '물가', '경기', '원화'],
-                '투자': ['ETF', '채권', '펀드', '배당', '투자', '수익'],
-                '기업': ['실적', '공시', '매출', '영업이익', '기업', '성장'],
-                '정책': ['정부', '규제', '정책', '법안', '제도', '당국']
-            }
-
-            # 네트워크 데이터 생성
-            network_data = {
-                'nodes': [{'id': 'center', 'label': '키워드', 'category': 'center'}],
-                'edges': []
-            }
-
-            # 워드클라우드 데이터에서 나온 단어들을 기준으로 카테고리 매핑
-            word_set = set(item['text'] for item in cloud_data)
-
-            # 카테고리별 키워드 추가
-            for category, keywords in categories.items():
-                matching_keywords = [word for word in keywords if word in word_set]
-                if matching_keywords:
-                    network_data['nodes'].append({
-                        'id': category,
-                        'label': category,
-                        'category': 'main'
-                    })
-                    network_data['edges'].append({
-                        'source': 'center',
-                        'target': category,
-                        'weight': 3
-                    })
-
-                    for word in matching_keywords:
-                        network_data['nodes'].append({
-                            'id': word,
-                            'label': word,
-                            'category': 'keyword'
-                        })
-                        network_data['edges'].append({
-                            'source': category,
-                            'target': word,
-                            'weight': 2
-                        })
-
-            print(f"Network data nodes: {len(network_data['nodes'])}, edges: {len(network_data['edges'])}")
-
-            # 언론사별 일간 보도 현황
-            press_daily = df.groupby(['date', 'author']).size().unstack(fill_value=0)
-
-            # 상위 7개 언론사 선택
-            top_authors = df['author'].value_counts().nlargest(7).index
-            press_daily = press_daily[top_authors]
+            latest_date_data = press_df[press_df['date'] == latest_date_str]
+            press_pivot = latest_date_data.pivot_table(
+                index='date',
+                columns='press',
+                values='count',
+                aggfunc='sum',
+                fill_value=0
+            )
 
             press_data = {
-                'dates': [d.strftime('%Y-%m-%d') for d in press_daily.index],
-                'authors': list(press_daily.columns),
-                'values': press_daily.values.tolist()
+                'date': str(latest_date_str),
+                'press': list(map(str, press_pivot.columns)),
+                'values': press_pivot.values[0].tolist()
             }
 
-            print(f"Press data dates: {len(press_data['dates'])}, authors: {len(press_data['authors'])}")
-
-            context = {
-                'wordcloud_data': json.dumps(cloud_data, ensure_ascii=False),
-                'network_data': json.dumps(network_data, ensure_ascii=False),
-                'press_data': json.dumps(press_data, ensure_ascii=False),
-                'analysis_date': datetime.now().strftime('%Y.%m.%d %H:%M')
-            }
+            # JSON 직렬화 시도
+            try:
+                json_press_data = json.dumps(press_data, ensure_ascii=False)
+                print("\n===== JSON Serialization =====")
+                print(json_press_data)
+            except Exception as e:
+                print(f"JSON Serialization Error: {e}")
         else:
-            context = {
-                'wordcloud_data': json.dumps([{"text": "데이터 없음", "size": 50, "sentiment": "neutral"}]),
-                'network_data': json.dumps({'nodes': [], 'edges': []}),
-                'press_data': json.dumps({'dates': [], 'authors': [], 'values': []}),
-                'analysis_date': datetime.now().strftime('%Y.%m.%d %H:%M')
+            press_data = {
+                'dates': [],
+                'press': [],
+                'values': []
             }
+
+        # 2. 워드클라우드 데이터 처리
+        # inbest.db의 news 테이블에서 데이터 가져오기
+        cursor.execute("""
+            SELECT title, content, author 
+            FROM news
+            WHERE date >= date('now', '-7 day')
+        """)
+        news_data = cursor.fetchall()
+
+        # 워드클라우드 데이터 생성
+        if news_data:
+            cloud_data = extract_keywords(news_data)
+        else:
+            cloud_data = [{"text": "데이터 없음", "size": 50, "sentiment": "neutral"}]
+
+        # 3. 키워드 관계망 데이터 생성
+        categories = {
+            '경제': ['금리', '주식', 'GDP', '물가', '경기', '원화'],
+            '투자': ['ETF', '채권', '펀드', '배당', '투자', '수익'],
+            '기업': ['실적', '공시', '매출', '영업이익', '기업', '성장'],
+            '정책': ['정부', '규제', '정책', '법안', '제도', '당국']
+        }
+
+        # 워드클라우드 데이터에서 나온 단어들을 기준으로 카테고리 매핑
+        word_set = set(item['text'] for item in cloud_data)
+
+        # 워드클라우드 데이터에서 가장 중요한 키워드 선택
+        if cloud_data:
+            # 빈도(size)와 길이를 고려하여 중심 키워드 선택
+            top_keywords = sorted(
+                cloud_data,
+                key=lambda x: (x['size'], len(x['text'])),
+                reverse=True
+            )
+
+            # 길이가 2자 이상인 키워드 중 첫 번째 선택
+            center_keyword = next(
+                (kw['text'] for kw in top_keywords if len(kw['text']) > 1),
+                '키워드'
+            )
+        else:
+            center_keyword = '키워드'
+
+        # 네트워크 데이터 생성
+        network_data = {
+            'nodes': [{'id': 'center', 'label': center_keyword, 'category': 'center'}],
+            'edges': []
+        }
+
+        # 카테고리별 키워드 추가
+        for category, keywords in categories.items():
+            matching_keywords = [word for word in keywords if word in word_set]
+            if matching_keywords:
+                network_data['nodes'].append({
+                    'id': category,
+                    'label': category,
+                    'category': 'main'
+                })
+                network_data['edges'].append({
+                    'source': 'center',
+                    'target': category,
+                    'weight': 3
+                })
+
+                for word in matching_keywords:
+                    network_data['nodes'].append({
+                        'id': word,
+                        'label': word,
+                        'category': 'keyword'
+                    })
+                    network_data['edges'].append({
+                        'source': category,
+                        'target': word,
+                        'weight': 2
+                    })
+
+        # 컨텍스트 생성
+        context = {
+            'wordcloud_data': json.dumps(cloud_data, ensure_ascii=False),
+            'network_data': json.dumps(network_data, ensure_ascii=False),
+            'press_data': json.dumps(press_data, ensure_ascii=False),
+            'analysis_date': datetime.now().strftime('%Y.%m.%d %H:%M')
+        }
 
     except Exception as e:
         print(f"Error occurred: {str(e)}")
-        print(f"Error type: {type(e)}")
         import traceback
         print(f"Traceback: {traceback.format_exc()}")
         context = {
             'wordcloud_data': json.dumps([{"text": "오류 발생", "size": 50, "sentiment": "neutral"}]),
             'network_data': json.dumps({'nodes': [], 'edges': []}),
-            'press_data': json.dumps({'dates': [], 'authors': [], 'values': []}),
+            'press_data': json.dumps({'dates': [], 'press': [], 'values': []}),
             'analysis_date': datetime.now().strftime('%Y.%m.%d %H:%M')
         }
 
     finally:
         if 'conn' in locals():
+            cursor.execute("DETACH DATABASE news_db")
             conn.close()
 
     return render(request, 'survey/daily_analysis.html', context)

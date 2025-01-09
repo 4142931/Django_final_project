@@ -73,3 +73,58 @@ def fetch_news_data():
     finally:
         conn.close()
     return rows
+
+
+# 기존 코드에 추가
+NEWS_DB_PATH = "C:/Django_final_project/news_analyzer/news.db"
+
+
+def fetch_news_data_from_news_db():
+    conn = sqlite3.connect(NEWS_DB_PATH)
+    cursor = conn.cursor()
+    try:
+        # 테이블에서 데이터 가져오기 (news 테이블이 있다고 가정)
+        cursor.execute("SELECT title, content, press, date FROM news ORDER BY date DESC")
+        rows = cursor.fetchall()  # [(제목, 내용, 언론사, 날짜), ...]
+    except sqlite3.Error as e:
+        print(f"SQLite 오류: {e}")
+        rows = []
+    finally:
+        conn.close()
+    return rows
+
+
+def inspect_news_database():
+    try:
+        # 데이터베이스 연결
+        conn = sqlite3.connect(NEWS_DB_PATH)
+        cursor = conn.cursor()
+
+        # 데이터베이스의 모든 테이블 조회
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        tables = cursor.fetchall()
+
+        print(f"=== 데이터베이스 테이블 목록 ({NEWS_DB_PATH}) ===")
+        for table in tables:
+            print(f"\n테이블: {table[0]}")
+
+            # 테이블 스키마 출력
+            cursor.execute(f"PRAGMA table_info({table[0]})")
+            columns = cursor.fetchall()
+            print("컬럼 구조:")
+            for column in columns:
+                print(f"  - {column[1]} ({column[2]})")
+
+            # 각 테이블의 첫 5개 행 출력
+            cursor.execute(f"SELECT * FROM {table[0]} LIMIT 5")
+            rows = cursor.fetchall()
+            print("\n첫 5개 행:")
+            for row in rows:
+                print(row)
+
+    except Exception as e:
+        print(f"오류 발생: {e}")
+
+    finally:
+        if 'conn' in locals():
+            conn.close()

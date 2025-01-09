@@ -16,7 +16,7 @@
 <div class="analysis-session">
     <!-- Header section -->
     <header class="stock-header">
-        <h2>오늘의 키워드 분석</h2>
+        <h2>오늘의 뉴스 분석</h2>
     </header>
 
     <!-- 분석기준 날짜 -->
@@ -27,13 +27,13 @@
     <div class="analysis-grid">
         <!-- 워드 클라우드 -->
         <div class="grid-item">
-            <h4>오늘의 키워드</h4>
+            <h4>주요 키워드</h4>
             <canvas id="wordCloud" width="300" height="300"></canvas>
         </div>
 
         <!-- 키워드 관계망 -->
         <div class="grid-item">
-            <h4>키워드 관계망</h4>
+            <h4>기업 이슈</h4>
             <div id="relationNetwork" style="width: 300px; height: 300px;"></div>
         </div>
 
@@ -201,54 +201,102 @@
 </script>
 
 <!-- 보도 현황 차트 스크립트 -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         try {
-            const rawData = '{{ press_data|escapejs }}';
-            const pressData = JSON.parse(rawData);
 
-            if (!pressData || !pressData.dates || !pressData.authors || !pressData.values ||
-                pressData.dates.length === 0 || pressData.authors.length === 0) {
+            Chart.register(ChartDataLabels);
+
+            const rawData = '{{ press_data|escapejs }}';
+            console.log('Raw Press Data:', rawData);
+
+            const pressData = JSON.parse(rawData);
+            console.log('Parsed Press Data:', pressData);
+
+            if (!pressData || !pressData.date || !pressData.press || !pressData.values) {
                 throw new Error('보도 현황 데이터가 없습니다');
             }
 
             const ctx = document.getElementById('mediaReportGraph').getContext('2d');
 
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: pressData.dates,
-                    datasets: pressData.authors.map((author, index) => ({
-                        label: author,
-                        data: pressData.values.map(row => row[index]),
-                        borderColor: [
-                            '#FF6384', '#36A2EB', '#FFCE56',
-                            '#4BC0C0', '#9966FF', '#FF9F40', '#FF99CC'
-                        ][index],
-                        fill: false,
-                        tension: 0.4
-                    }))
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+            // 각 언론사의 총 기사 수를 계산
+            const totalsByPress = pressData.values;
+            const totalArticles = totalsByPress.reduce((a, b) => a + b, 0);  // 총 기사 수 계산
+
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: pressData.press,  // 언론사 이름만 표시
+                datasets: [{
+                    data: totalsByPress,
+                    backgroundColor: [
+                        '#FF4C4C', '#34B234', '#489CFF',
+                        '#FFC700', '#9D51FF', '#FF9054',
+                        '#FF99CC'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        enabled: true  // 호버 툴팁 비활성화
                     },
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                            labels: {
-                                font: {
-                                    family: 'Pretendard-Regular'
+                    datalabels: {
+                        color: '#FFFFFF',  // 흰색 텍스트
+                        font: {
+                            size: 12,
+                            weight: 'regular',
+                            family: 'Pretendard-Regular',
+                            stroke: ''
+                        },
+                        textStrokeWidth: 2,  // 스트로크 두께
+                        textStrokeColor: '#181818',
+                        formatter: function(value, context) {
+                            const total = context.dataset.data.reduce((a,b) => a+b, 0);
+                            const percent = ((value / total) * 100).toFixed(1);
+                            return `${percent}%\n(${value})`;  // 비율과 기사 수 표시
+                        },
+                        anchor: 'center',
+                        align: 'center',
+                        offset: -20,
+                        display: true
+                    },
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            boxWidth: 15,
+                            boxHeight: 15,
+                            font: {
+                                family: 'Pretendard-Regular',
+                                size: 13
+                            },
+                            generateLabels: function(chart) {
+                                const data = chart.data;
+                                if (data.labels.length && data.datasets.length) {
+                                    return data.labels.map((label, i) => {
+                                        return {
+                                            text: label,  // 언론사 이름만 표시
+                                            fillStyle: data.datasets[0].backgroundColor[i],
+                                            strokeStyle: data.datasets[0].backgroundColor[i],
+                                            lineWidth: 0,
+                                            hidden: false,
+                                            index: i,
+                                        };
+                                    });
                                 }
+                                return [];
                             }
                         }
                     }
                 }
-            });
+            }
+        });
         } catch (error) {
             console.error('Error in press chart:', error);
             const canvas = document.getElementById('mediaReportGraph');
@@ -260,5 +308,4 @@
         }
     });
 </script>
-
 {% endblock %}
