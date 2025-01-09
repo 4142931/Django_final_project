@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}InBest{% endblock %}
-
 {% block content %}
+
 <link rel="stylesheet" href="{% static 'survey/css/daily_analysis.css' %}">
 <style>
     @font-face {
@@ -27,30 +27,35 @@
     <div class="analysis-grid">
         <!-- 워드 클라우드 -->
         <div class="grid-item">
-            <h4>키워드 - 오늘의 키워드</h4>
+            <h4>오늘의 키워드</h4>
             <canvas id="wordCloud" width="300" height="300"></canvas>
         </div>
 
         <!-- 키워드 관계망 -->
         <div class="grid-item">
-            <h4>키워드 - 관련 키워드 관계망</h4>
+            <h4>키워드 관계망</h4>
             <div id="relationNetwork" style="width: 300px; height: 300px;"></div>
         </div>
 
         <!-- 보도 현황 그래프 -->
         <div class="grid-item">
-            <h4>언론사 - 보도 현황</h4>
+            <h4>언론사 보도 현황</h4>
             <canvas id="mediaReportGraph" width="300" height="300"></canvas>
         </div>
     </div>
 </div>
 
-<!-- 워드클라우드 스크립트 -->
+<!-- 필요한 라이브러리들 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- 워드클라우드 스크립트 -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         try {
-            const cloudData = {{ wordcloud_data|safe }};
+            const rawData = '{{ wordcloud_data|escapejs }}';
+            const cloudData = JSON.parse(rawData);
             console.log('Cloud data:', cloudData);
 
             if (!cloudData || cloudData.length === 0) {
@@ -60,23 +65,33 @@
             const canvas = document.getElementById('wordCloud');
             const options = {
                 list: cloudData.map(item => [item.text, item.size]),
-                gridSize: 8,
-                weightFactor: 2,
+                gridSize: 4,  // 격자 크기 감소
+                weightFactor: 1.2,  // 글자 크기 조정
                 fontFamily: 'Pretendard-Regular',
-                color: '#1565C0',
+                color: function(word) {
+                    const wordData = cloudData.find(item => item.text === word);
+                    if (wordData) {
+                        switch(wordData.sentiment) {
+                            case 'positive': return '#2E7D32';
+                            case 'negative': return '#C62828';
+                            case 'neutral': return '#1565C0';
+                        }
+                    }
+                    return '#1565C0';
+                },
                 backgroundColor: 'white',
-                rotateRatio: 0.3,
-                minSize: 12,
-                shape: 'circle',
+                rotateRatio: 0.5,
+                minSize: 5,
                 drawOutOfBound: false,
-                shrinkToFit: true
+                shrinkToFit: true,
+                shape: 'circle',
+                ellipticity: 1
             };
 
             WordCloud(canvas, options);
-            console.log('WordCloud initialized');
 
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error in word cloud:', error);
             const canvas = document.getElementById('wordCloud');
             const ctx = canvas.getContext('2d');
             ctx.font = '14px Pretendard-Regular';
@@ -86,4 +101,164 @@
         }
     });
 </script>
+
+<!-- 관계망 그래프 스크립트 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            const rawData = '{{ network_data|escapejs }}';
+            const networkData = JSON.parse(rawData);
+
+            if (!networkData || !networkData.nodes || !networkData.edges ||
+                networkData.nodes.length === 0 || networkData.edges.length === 0) {
+                throw new Error('네트워크 데이터가 없습니다');
+            }
+
+            const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+            const width = 260;  // 마진을 고려한 크기 조정
+            const height = 260;
+
+            // 기존 SVG 제거
+            d3.select('#relationNetwork').selectAll('svg').remove();
+
+            // 새로운 SVG 생성
+            const svg = d3.select('#relationNetwork')
+                .append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            // 시뮬레이션 설정
+            const simulation = d3.forceSimulation(networkData.nodes)
+                .force('link', d3.forceLink(networkData.edges)
+                    .id(d => d.id)
+                    .distance(d => d.source === 'center' ? 80 : 40))  // 거리 조정
+                .force('charge', d3.forceManyBody()
+                    .strength(d => d.category === 'center' ? -200 : -100))  // 반발력 조정
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force('collision', d3.forceCollide()
+                    .radius(d => d.category === 'center' ? 40 :
+                                d.category === 'main' ? 30 : 20));  // 충돌 범위 조정
+
+            // 링크 그리기
+            const links = svg.append('g')
+                .selectAll('line')
+                .data(networkData.edges)
+                .enter()
+                .append('line')
+                .style('stroke', '#999')
+                .style('stroke-width', d => d.weight);
+
+            // 노드 그룹 생성
+            const nodes = svg.append('g')
+                .selectAll('g')
+                .data(networkData.nodes)
+                .enter()
+                .append('g');
+
+            // 노드 원 추가
+            nodes.append('circle')
+                .attr('r', d => d.category === 'center' ? 25 :
+                               d.category === 'main' ? 20 : 15)  // 크기 조정
+                .style('fill', d => d.category === 'center' ? '#ff7f0e' :
+                                   d.category === 'main' ? '#1f77b4' : '#2ca02c')
+                .style('opacity', 0.9);
+
+            // 노드 텍스트 추가
+            nodes.append('text')
+                .text(d => d.label)
+                .attr('text-anchor', 'middle')
+                .attr('dy', 5)
+                .style('font-family', 'Pretendard-Regular')
+                .style('font-size', d => d.category === 'center' ? '14px' :
+                                       d.category === 'main' ? '12px' : '10px')  // 폰트 크기 조정
+                .style('fill', 'white');
+
+            // 시뮬레이션 업데이트
+            simulation.on('tick', () => {
+                // 노드가 SVG 영역을 벗어나지 않도록 제한
+                nodes.attr('transform', d => {
+                    d.x = Math.max(20, Math.min(width - 20, d.x));
+                    d.y = Math.max(20, Math.min(height - 20, d.y));
+                    return `translate(${d.x},${d.y})`;
+                });
+
+                // 링크 위치 업데이트
+                links
+                    .attr('x1', d => d.source.x)
+                    .attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x)
+                    .attr('y2', d => d.target.y);
+            });
+
+        } catch (error) {
+            console.error('Error in network visualization:', error);
+            const container = document.getElementById('relationNetwork');
+            container.innerHTML = '<div style="text-align: center; padding-top: 100px; color: #666;">관계망을 생성할 수 없습니다</div>';
+        }
+    });
+</script>
+
+<!-- 보도 현황 차트 스크립트 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            const rawData = '{{ press_data|escapejs }}';
+            const pressData = JSON.parse(rawData);
+
+            if (!pressData || !pressData.dates || !pressData.authors || !pressData.values ||
+                pressData.dates.length === 0 || pressData.authors.length === 0) {
+                throw new Error('보도 현황 데이터가 없습니다');
+            }
+
+            const ctx = document.getElementById('mediaReportGraph').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: pressData.dates,
+                    datasets: pressData.authors.map((author, index) => ({
+                        label: author,
+                        data: pressData.values.map(row => row[index]),
+                        borderColor: [
+                            '#FF6384', '#36A2EB', '#FFCE56',
+                            '#4BC0C0', '#9966FF', '#FF9F40', '#FF99CC'
+                        ][index],
+                        fill: false,
+                        tension: 0.4
+                    }))
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                font: {
+                                    family: 'Pretendard-Regular'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        } catch (error) {
+            console.error('Error in press chart:', error);
+            const canvas = document.getElementById('mediaReportGraph');
+            const ctx = canvas.getContext('2d');
+            ctx.font = '14px Pretendard-Regular';
+            ctx.fillStyle = '#666';
+            ctx.textAlign = 'center';
+            ctx.fillText('보도 현황을 생성할 수 없습니다', canvas.width/2, canvas.height/2);
+        }
+    });
+</script>
+
 {% endblock %}

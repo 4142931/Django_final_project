@@ -6,8 +6,11 @@ import os
 
 
 def extract_keywords(news_data):
-    # 뉴스 데이터 DataFrame 생성
-    df = pd.DataFrame(news_data, columns=['title', 'content'])
+    # DataFrame 생성 시 세 개의 컬럼 모두 지정
+    df = pd.DataFrame(news_data, columns=['title', 'content', 'author'])
+
+    # 필요한 컬럼(title, content)만 선택
+    df = df[['title', 'content']]  # author 컬럼 제외
 
     # CSV 파일들의 경로 설정
     # 프로젝트의 base 경로를 명시적으로 설정
