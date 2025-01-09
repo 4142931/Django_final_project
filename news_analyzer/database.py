@@ -75,9 +75,8 @@ def fetch_news_data():
     return rows
 
 
-# 기존 코드에 추가
+# news.db 추가
 NEWS_DB_PATH = "C:/Django_final_project/news_analyzer/news.db"
-
 
 def fetch_news_data_from_news_db():
     conn = sqlite3.connect(NEWS_DB_PATH)

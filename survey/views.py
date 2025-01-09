@@ -81,15 +81,10 @@ def mypage_view(request):
     return render(request, 'survey/mypage.html', context)
 
 
-
-
-
 # 주식 추천
 @login_required
 def stock_recommendations(request):
     return render(request, 'survey/stock_recommendations.html')
-
-
 
 
 # News
@@ -288,7 +283,7 @@ def daily_analysis(request):
         inbest_db_path = os.path.join("news_analyzer", "inbest.db")
         news_db_path = os.path.join("news_analyzer", "news.db")
 
-        # 데이터베이스 연결
+        # inbest.db 데이터베이스 연결
         conn = sqlite3.connect(inbest_db_path)
         cursor = conn.cursor()
 
