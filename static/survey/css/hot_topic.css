@@ -41,7 +41,7 @@ body {
 }
 
 .hot-topic-title {
-    font-size: 24px;
+    font-size: 30px;
     font-weight: bold;
     margin-bottom: 15px;
     color: #002f6c;
@@ -69,7 +69,7 @@ body {
     flex-wrap: wrap;
     gap: 20px;
     width: 100%;
-    justify-content: space-between;
+    justify-content: space-between; /* 박스들이 좌우 균등하게 정렬 */
 }
 
 .article-box {
@@ -80,24 +80,34 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: left;
     margin-bottom: 20px;
+    display: flex; /* 제목과 내용을 세로 배치 */
+    flex-direction: column; /* 제목과 내용을 세로로 정렬 */
 }
 
-.article-title {
-    font-size: 20px;
-    font-weight: bold;
-    color: #002f6c;
-    margin-bottom: 10px;
-    text-decoration: underline;
-}
-
-.article-content {
-    font-size: 16px;
-    color: #333;
-    line-height: 1.8;
+/* 기사 제목 스타일 */
+.hot-topic-articles h3 {
+    font-size: 18px; /* 제목 크기 조정 */
+    font-weight: bold; /* 굵기 유지 */
+    color: #002f6c; /* 제목 색상 */
+    margin: 0 0 10px; /* 위쪽과 아래쪽 여백 조정 */
+    line-height: 1.4; /* 줄 간격 */
+    text-align: left; /* 제목 정렬 */
 }
 
 /* 강조 요소 스타일 */
 .highlight {
     color: #d9534f;
     font-weight: bold;
+}
+
+/* 기본 링크 스타일 제거 */
+.hot-topic-articles a {
+    color: inherit; /* 텍스트 색상을 부모 요소와 동일하게 설정 */
+    text-decoration: none; /* 밑줄 제거 */
+}
+
+/* 링크 호버 시 스타일 */
+.hot-topic-articles a:hover {
+    color: #0070f3; /* 호버 시 파란색으로 변경 */
+    text-decoration: underline; /* 호버 시 밑줄 추가 */
 }
