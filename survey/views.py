@@ -24,7 +24,6 @@ def index_view(request):
     return render(request, 'survey/index.html')
 
 
-
 # 로그인 & 로그아웃
 def signup_view(request):
     if request.method == 'POST':
@@ -37,11 +36,10 @@ def signup_view(request):
         form = UserCreationForm()
     return render(request, 'survey/signup.html', {'form': form})
 
+
 def logout_view(request):
     logout(request)
     return redirect('News_home')
-
-
 
 
 # 마이페이지
@@ -79,12 +77,6 @@ def mypage_view(request):
     }
 
     return render(request, 'survey/mypage.html', context)
-
-
-# 주식 추천
-@login_required
-def stock_recommendations(request):
-    return render(request, 'survey/stock_recommendations.html')
 
 
 # News
@@ -173,8 +165,6 @@ def hot_topic(request):
 
         positive_news = []
         negative_news = []
-        main_positive_news = None
-        main_negative_news = None
 
         # 뉴스 분류
         for title, content, url in news_data:
@@ -188,30 +178,13 @@ def hot_topic(request):
                 'url': url
             }
 
+            # 긍정/부정 점수에 따라 뉴스 분류
             if pos_score > neg_score:
-                if not main_positive_news:  # 첫 번째 긍정 뉴스를 메인 뉴스로
-                    main_positive_news = news_item
-                elif len(positive_news) < 4:  # 나머지는 목록에
+                if len(positive_news) < 4:  # 최대 4개까지만 저장
                     positive_news.append(news_item)
             elif neg_score > pos_score:
-                if not main_negative_news:  # 첫 번째 부정 뉴스를 메인 뉴스로
-                    main_negative_news = news_item
-                elif len(negative_news) < 4:  # 나머지는 목록에
+                if len(negative_news) < 4:  # 최대 4개까지만 저장
                     negative_news.append(news_item)
-
-        # 부족한 기사 채우기
-        if not main_positive_news:
-            main_positive_news = {
-                'title': '오늘은 주요 호재가 없습니다',
-                'content': '현재 시장에 주요한 호재성 뉴스가 없습니다.',
-                'url': '#'
-            }
-        if not main_negative_news:
-            main_negative_news = {
-                'title': '오늘은 주요 악재가 없습니다',
-                'content': '현재 시장에 주요한 악재성 뉴스가 없습니다.',
-                'url': '#'
-            }
 
         while len(positive_news) < 4:
             positive_news.append({
@@ -227,8 +200,6 @@ def hot_topic(request):
             })
 
         context = {
-            'main_positive_news': main_positive_news,
-            'main_negative_news': main_negative_news,
             'positive_news': positive_news,
             'negative_news': negative_news,
         }
@@ -241,8 +212,6 @@ def hot_topic(request):
             'url': '#'
         }
         context = {
-            'main_positive_news': default_item,
-            'main_negative_news': default_item,
             'positive_news': [default_item] * 4,
             'negative_news': [default_item] * 4
         }
