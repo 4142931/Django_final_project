@@ -7,52 +7,64 @@
 
     <div class="hot-topic-container">
         <div class="hot-topic-box-wrapper">
-            <!-- Left Boxes: Good News and Bad News -->
+            <!-- Left Boxes: Good News -->
             <div class="hot-topic-box">
                 <h2 class="hot-topic-title good-news">금일 호재</h2>
-                <p class="hot-topic-content">여기에 금일 호재 내용이 들어갑니다. 시장 상황이 긍정적으로 변하고 있습니다.</p>
+                <p class="hot-topic-content">
+                    {{ main_positive_news.title|truncatechars:50 }}
+                </p>
             </div>
+
+            <!-- Right Boxes: Bad News -->
             <div class="hot-topic-box">
                 <h2 class="hot-topic-title bad-news">금일 악재</h2>
-                <p class="hot-topic-content">여기에 금일 악재 내용이 들어갑니다. 시장 상황이 부정적입니다.</p>
+                <p class="hot-topic-content">
+                    {{ main_negative_news.title|truncatechars:50 }}
+                </p>
             </div>
         </div>
 
         <!-- Bottom Boxes: Articles -->
         <div class="hot-topic-articles">
+            <!-- 기사 1 -->
             <div class="article-box">
-                <h3 class="article-title">기사 제목 1</h3>
-                <p class="article-content">기사 내용이 여기에 들어갑니다...</p>
+                <h3 class="article-title">{{ positive_news.0.title|truncatechars:30 }}</h3>
+                <p class="article-content">{% if positive_news.0.content %}{{ positive_news.0.content|truncatechars:100 }}{% else %}추가 호재 기사가 없습니다{% endif %}</p>
             </div>
             <div class="article-box">
-                <h3 class="article-title">기사 제목 2</h3>
-                <p class="article-content">기사 내용이 여기에 들어갑니다...</p>
+                <h3 class="article-title">{{ negative_news.0.title|truncatechars:30 }}</h3>
+                <p class="article-content">{% if negative_news.0.content %}{{ negative_news.0.content|truncatechars:100 }}{% else %}추가 악재 기사가 없습니다{% endif %}</p>
+            </div>
+
+            <!-- 기사 2 -->
+            <div class="article-box">
+                <h3 class="article-title">{{ positive_news.1.title|truncatechars:30 }}</h3>
+                <p class="article-content">{% if positive_news.1.content %}{{ positive_news.1.content|truncatechars:100 }}{% else %}추가 호재 기사가 없습니다{% endif %}</p>
             </div>
             <div class="article-box">
-                <h3 class="article-title">기사 제목 3</h3>
-                <p class="article-content">기사 내용이 여기에 들어갑니다...</p>
+                <h3 class="article-title">{{ negative_news.1.title|truncatechars:30 }}</h3>
+                <p class="article-content">{% if negative_news.1.content %}{{ negative_news.1.content|truncatechars:100 }}{% else %}추가 악재 기사가 없습니다{% endif %}</p>
+            </div>
+
+            <!-- 기사 3 -->
+            <div class="article-box">
+                <h3 class="article-title">{{ positive_news.2.title|truncatechars:30 }}</h3>
+                <p class="article-content">{% if positive_news.2.content %}{{ positive_news.2.content|truncatechars:100 }}{% else %}추가 호재 기사가 없습니다{% endif %}</p>
             </div>
             <div class="article-box">
-                <h3 class="article-title">기사 제목 4</h3>
-                <p class="article-content">기사 내용이 여기에 들어갑니다...</p>
+                <h3 class="article-title">{{ negative_news.2.title|truncatechars:30 }}</h3>
+                <p class="article-content">{% if negative_news.2.content %}{{ negative_news.2.content|truncatechars:100 }}{% else %}추가 악재 기사가 없습니다{% endif %}</p>
+            </div>
+
+            <!-- 기사 4 -->
+            <div class="article-box">
+                <h3 class="article-title">{{ positive_news.3.title|truncatechars:30 }}</h3>
+                <p class="article-content">{% if positive_news.3.content %}{{ positive_news.3.content|truncatechars:100 }}{% else %}추가 호재 기사가 없습니다{% endif %}</p>
             </div>
             <div class="article-box">
-                <h3 class="article-title">기사 제목 5</h3>
-                <p class="article-content">기사 내용이 여기에 들어갑니다...</p>
-            </div>
-            <div class="article-box">
-                <h3 class="article-title">기사 제목 6</h3>
-                <p class="article-content">기사 내용이 여기에 들어갑니다...</p>
-            </div>
-            <div class="article-box">
-                <h3 class="article-title">기사 제목 7</h3>
-                <p class="article-content">기사 내용이 여기에 들어갑니다...</p>
-            </div>
-            <div class="article-box">
-                <h3 class="article-title">기사 제목 8</h3>
-                <p class="article-content">기사 내용이 여기에 들어갑니다...</p>
+                <h3 class="article-title">{{ negative_news.3.title|truncatechars:30 }}</h3>
+                <p class="article-content">{% if negative_news.3.content %}{{ negative_news.3.content|truncatechars:100 }}{% else %}추가 악재 기사가 없습니다{% endif %}</p>
             </div>
         </div>
     </div>
-
 {% endblock %}

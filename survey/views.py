@@ -1,15 +1,23 @@
+import json
+import os
+import sqlite3
 from collections import defaultdict
 import re
 
+import networkx as nx
+import pandas as pd
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 
+from news_analyzer.daily_analysis import preprocess_text
+from news_analyzer.daily_analysis.wordcloud import extract_keywords
 from news_analyzer.database import fetch_news_data
 from .models import Question, InvestmentResult
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
-from datetime import datetime
+from datetime import datetime, timedelta
+
 
 # 메인 페이지
 def index_view(request):
@@ -24,7 +32,7 @@ def signup_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user) # 회원가입 후 자동 로그인 처리
-            return redirect('index')  # 홈 페이지로 리디렉션
+            return redirect('News_home')  # 홈 페이지로 리디렉션
     else:
         form = UserCreationForm()
     return render(request, 'survey/signup.html', {'form': form})
@@ -149,16 +157,253 @@ def News_home(request):
 
 @login_required
 def hot_topic(request):
-    return render(request, 'survey/hot_topic.html')
+    try:
+        conn = sqlite3.connect("news_analyzer/inbest.db")
+        cursor = conn.cursor()
+
+        cursor.execute("""
+           SELECT title, content 
+           FROM news 
+           ORDER BY date DESC 
+           LIMIT 50
+       """)
+
+        news_data = cursor.fetchall()
+
+        # 감성어 사전 로드
+        base_path = os.path.join(os.path.dirname(__file__), '..', 'news_analyzer', 'csv')
+        senti_lex = pd.read_csv(os.path.join(base_path, 'SentiWord_Dict.csv'))
+        positive_words = set(senti_lex[senti_lex['polarity'] > 0]['word'])
+        negative_words = set(senti_lex[senti_lex['polarity'] < 0]['word'])
+
+        positive_news = []
+        negative_news = []
+        main_positive_news = None
+        main_negative_news = None
+
+        # 뉴스 분류
+        for title, content in news_data:
+            words = set(re.findall(r'[가-힣]+', title))
+            pos_score = len(words & positive_words)
+            neg_score = len(words & negative_words)
+
+            news_item = {
+                'title': title,
+                'content': content
+            }
+
+            if pos_score > neg_score:
+                if not main_positive_news:  # 첫 번째 긍정 뉴스를 메인 뉴스로
+                    main_positive_news = news_item
+                elif len(positive_news) < 4:  # 나머지는 목록에
+                    positive_news.append(news_item)
+            elif neg_score > pos_score:
+                if not main_negative_news:  # 첫 번째 부정 뉴스를 메인 뉴스로
+                    main_negative_news = news_item
+                elif len(negative_news) < 4:  # 나머지는 목록에
+                    negative_news.append(news_item)
+
+        # 부족한 기사 채우기
+        if not main_positive_news:
+            main_positive_news = {
+                'title': '오늘은 주요 호재가 없습니다',
+                'content': '현재 시장에 주요한 호재성 뉴스가 없습니다.'
+            }
+        if not main_negative_news:
+            main_negative_news = {
+                'title': '오늘은 주요 악재가 없습니다',
+                'content': '현재 시장에 주요한 악재성 뉴스가 없습니다.'
+            }
+
+        while len(positive_news) < 4:
+            positive_news.append({
+                'title': '',
+                'content': '추가 호재 기사가 없습니다.'
+            })
+        while len(negative_news) < 4:
+            negative_news.append({
+                'title': '',
+                'content': '추가 악재 기사가 없습니다.'
+            })
+
+        context = {
+            'main_positive_news': main_positive_news,
+            'main_negative_news': main_negative_news,
+            'positive_news': positive_news,
+            'negative_news': negative_news,
+        }
+
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        default_item = {
+            'title': '데이터를 불러올 수 없습니다.',
+            'content': '내용을 불러올 수 없습니다.'
+        }
+        context = {
+            'main_positive_news': default_item,
+            'main_negative_news': default_item,
+            'positive_news': [default_item] * 4,
+            'negative_news': [default_item] * 4
+        }
+
+    finally:
+        if 'conn' in locals():
+            conn.close()
+
+    return render(request, 'survey/hot_topic.html', context)
+
+
 @login_required
 def daily_analysis(request):
-    return render(request, 'survey/daily_analysis.html')
-@login_required
-def daily_analysis(request):
-    analysis_date = datetime.now().strftime("%Y.%m.%d(%a)")
-    context = {
-        'analysis_date': analysis_date,
-    }
+    def convert_kr_date(date_str):
+        try:
+            # 마침표 제거 및 분리
+            parts = date_str.replace('.', '').split()
+
+            # 날짜 부분 처리
+            date_nums = parts[0].split()
+            year = int(date_nums[0][:4])
+            month = int(date_nums[0][4:6])
+            day = int(date_nums[0][6:8])
+
+            # 시간 부분 처리
+            time_parts = parts[2].split(':')
+            hour = int(time_parts[0])
+            minute = int(time_parts[1])
+
+            # 오전/오후 처리
+            if parts[1] == '오후' and hour < 12:
+                hour += 12
+            elif parts[1] == '오전' and hour == 12:
+                hour = 0
+
+            return datetime(year, month, day, hour, minute).date()
+        except Exception as e:
+            print(f"Date conversion error for {date_str}: {str(e)}")
+            # 오류 발생 시 현재 날짜 반환
+            return datetime.now().date()
+
+    try:
+        # inbest.db 연결
+        db_path = os.path.join("news_analyzer", "inbest.db")
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+
+        # 7일간의 뉴스 데이터 조회
+        cursor.execute("""
+            SELECT title, content, author, date 
+            FROM news 
+            WHERE date >= datetime('now', '-7 day')
+            ORDER BY date DESC;
+        """)
+
+        news_data = cursor.fetchall()
+        print(f"Total news data fetched: {len(news_data)}")
+
+        if news_data:
+            # 데이터프레임 생성
+            df = pd.DataFrame(news_data, columns=['title', 'content', 'author', 'date'])
+
+            # 날짜 변환
+            df['date'] = df['date'].apply(convert_kr_date)
+
+            print(f"DataFrame shape: {df.shape}")
+
+            # 워드클라우드 데이터 생성
+            cloud_data = extract_keywords(df[['title', 'content', 'author']].values.tolist())
+            print(f"Word cloud data length: {len(cloud_data)}")
+
+            # 카테고리 정의
+            categories = {
+                '경제': ['금리', '주식', 'GDP', '물가', '경기', '원화'],
+                '투자': ['ETF', '채권', '펀드', '배당', '투자', '수익'],
+                '기업': ['실적', '공시', '매출', '영업이익', '기업', '성장'],
+                '정책': ['정부', '규제', '정책', '법안', '제도', '당국']
+            }
+
+            # 네트워크 데이터 생성
+            network_data = {
+                'nodes': [{'id': 'center', 'label': '키워드', 'category': 'center'}],
+                'edges': []
+            }
+
+            # 워드클라우드 데이터에서 나온 단어들을 기준으로 카테고리 매핑
+            word_set = set(item['text'] for item in cloud_data)
+
+            # 카테고리별 키워드 추가
+            for category, keywords in categories.items():
+                matching_keywords = [word for word in keywords if word in word_set]
+                if matching_keywords:
+                    network_data['nodes'].append({
+                        'id': category,
+                        'label': category,
+                        'category': 'main'
+                    })
+                    network_data['edges'].append({
+                        'source': 'center',
+                        'target': category,
+                        'weight': 3
+                    })
+
+                    for word in matching_keywords:
+                        network_data['nodes'].append({
+                            'id': word,
+                            'label': word,
+                            'category': 'keyword'
+                        })
+                        network_data['edges'].append({
+                            'source': category,
+                            'target': word,
+                            'weight': 2
+                        })
+
+            print(f"Network data nodes: {len(network_data['nodes'])}, edges: {len(network_data['edges'])}")
+
+            # 언론사별 일간 보도 현황
+            press_daily = df.groupby(['date', 'author']).size().unstack(fill_value=0)
+
+            # 상위 7개 언론사 선택
+            top_authors = df['author'].value_counts().nlargest(7).index
+            press_daily = press_daily[top_authors]
+
+            press_data = {
+                'dates': [d.strftime('%Y-%m-%d') for d in press_daily.index],
+                'authors': list(press_daily.columns),
+                'values': press_daily.values.tolist()
+            }
+
+            print(f"Press data dates: {len(press_data['dates'])}, authors: {len(press_data['authors'])}")
+
+            context = {
+                'wordcloud_data': json.dumps(cloud_data, ensure_ascii=False),
+                'network_data': json.dumps(network_data, ensure_ascii=False),
+                'press_data': json.dumps(press_data, ensure_ascii=False),
+                'analysis_date': datetime.now().strftime('%Y.%m.%d %H:%M')
+            }
+        else:
+            context = {
+                'wordcloud_data': json.dumps([{"text": "데이터 없음", "size": 50, "sentiment": "neutral"}]),
+                'network_data': json.dumps({'nodes': [], 'edges': []}),
+                'press_data': json.dumps({'dates': [], 'authors': [], 'values': []}),
+                'analysis_date': datetime.now().strftime('%Y.%m.%d %H:%M')
+            }
+
+    except Exception as e:
+        print(f"Error occurred: {str(e)}")
+        print(f"Error type: {type(e)}")
+        import traceback
+        print(f"Traceback: {traceback.format_exc()}")
+        context = {
+            'wordcloud_data': json.dumps([{"text": "오류 발생", "size": 50, "sentiment": "neutral"}]),
+            'network_data': json.dumps({'nodes': [], 'edges': []}),
+            'press_data': json.dumps({'dates': [], 'authors': [], 'values': []}),
+            'analysis_date': datetime.now().strftime('%Y.%m.%d %H:%M')
+        }
+
+    finally:
+        if 'conn' in locals():
+            conn.close()
+
     return render(request, 'survey/daily_analysis.html', context)
 
 
@@ -349,5 +594,4 @@ def mbti_result(request):
         'detailed_description03': detailed_description03,
         'image_path': result_data.get('image_path', ''),
     })
-
 
