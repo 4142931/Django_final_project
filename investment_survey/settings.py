@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     'survey',
     'news_analyzer',
+    'stock',
 ]
 
 MIDDLEWARE = [
