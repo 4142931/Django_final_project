@@ -157,9 +157,9 @@ def hot_topic(request):
         cursor = conn.cursor()
 
         cursor.execute("""
-           SELECT title, content 
-           FROM news 
-           ORDER BY date DESC 
+           SELECT title, content, url
+           FROM news
+           ORDER BY date DESC
            LIMIT 50
        """)
 
@@ -177,14 +177,15 @@ def hot_topic(request):
         main_negative_news = None
 
         # 뉴스 분류
-        for title, content in news_data:
+        for title, content, url in news_data:
             words = set(re.findall(r'[가-힣]+', title))
             pos_score = len(words & positive_words)
             neg_score = len(words & negative_words)
 
             news_item = {
                 'title': title,
-                'content': content
+                'content': content,
+                'url': url
             }
 
             if pos_score > neg_score:
@@ -202,23 +203,27 @@ def hot_topic(request):
         if not main_positive_news:
             main_positive_news = {
                 'title': '오늘은 주요 호재가 없습니다',
-                'content': '현재 시장에 주요한 호재성 뉴스가 없습니다.'
+                'content': '현재 시장에 주요한 호재성 뉴스가 없습니다.',
+                'url': '#'
             }
         if not main_negative_news:
             main_negative_news = {
                 'title': '오늘은 주요 악재가 없습니다',
-                'content': '현재 시장에 주요한 악재성 뉴스가 없습니다.'
+                'content': '현재 시장에 주요한 악재성 뉴스가 없습니다.',
+                'url': '#'
             }
 
         while len(positive_news) < 4:
             positive_news.append({
                 'title': '',
-                'content': '추가 호재 기사가 없습니다.'
+                'content': '추가 호재 기사가 없습니다.',
+                'url': '#'
             })
         while len(negative_news) < 4:
             negative_news.append({
                 'title': '',
-                'content': '추가 악재 기사가 없습니다.'
+                'content': '추가 악재 기사가 없습니다.',
+                'url': '#'
             })
 
         context = {
@@ -232,7 +237,8 @@ def hot_topic(request):
         print(f"Error: {str(e)}")
         default_item = {
             'title': '데이터를 불러올 수 없습니다.',
-            'content': '내용을 불러올 수 없습니다.'
+            'content': '내용을 불러올 수 없습니다.',
+            'url': '#'
         }
         context = {
             'main_positive_news': default_item,
